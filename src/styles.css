@@ -2309,6 +2309,18 @@ tr:last-child td {
   color: var(--text);
 }
 
+.subnav-tab.create-tab {
+  background: rgba(0, 122, 255, 0.08);
+  color: var(--primary);
+  border: 1px dashed rgba(0, 122, 255, 0.4);
+}
+
+.subnav-tab.create-tab:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-style: solid;
+}
+
 /* Training Video Styles */
 .work-title-row {
   display: flex;
