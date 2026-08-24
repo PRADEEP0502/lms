@@ -2680,4 +2680,81 @@ tr:last-child td {
   background: #ffebe9 !important;
 }
 
+/* Pixel-Perfect Template Cards Grid */
+.template-selection-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.template-selection-field .field-label {
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: var(--text);
+}
+
+.template-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .template-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.template-tile {
+  padding: 14px;
+  border-radius: var(--radius-small);
+  border: 1.5px solid var(--line);
+  background: #fbfbfd;
+  cursor: pointer;
+  transition: all 180ms ease;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.template-tile:hover {
+  background: #ffffff;
+  border-color: #c7c7cc;
+}
+
+.template-tile.active {
+  background: rgba(0, 122, 255, 0.06);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.12);
+}
+
+.tile-icon-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tile-emoji {
+  font-size: 1.1rem;
+}
+
+.tile-icon-head strong {
+  font-size: 0.9rem;
+  font-weight: 650;
+  color: var(--text);
+  flex: 1;
+}
+
+.tile-check {
+  color: var(--primary);
+}
+
+.template-tile p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--secondary);
+  line-height: 1.35;
+}
+
 

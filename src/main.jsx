@@ -1667,13 +1667,36 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
               ))}
             </select>
           </label>
-          <label>
-            Module Template & Work Items
-            <select value={template} onChange={(e) => setTemplate(e.target.value)} className="input-wrap select-input">
-              <option value="DEFAULT_20">⚡ Use 20 Standard Mill Data Entry Items (Compacting, Stenter, Lab, Petrol, etc.)</option>
-              <option value="BLANK">📝 Create Blank Module (Add custom work items manually)</option>
-            </select>
-          </label>
+
+          {/* Pixel-Perfect Template Selection Cards */}
+          <div className="template-selection-field">
+            <span className="field-label">Choose Module Template:</span>
+            <div className="template-cards-grid">
+              <div
+                className={`template-tile ${template === 'DEFAULT_20' ? 'active' : ''}`}
+                onClick={() => setTemplate('DEFAULT_20')}
+              >
+                <div className="tile-icon-head">
+                  <span className="tile-emoji">⚡</span>
+                  <strong>20 Standard Mill Items</strong>
+                  {template === 'DEFAULT_20' && <Check size={16} className="tile-check" />}
+                </div>
+                <p>Pre-loaded with 20 standard mill entries (Compacting, Stenter, Lab, Petrol, QAD, etc.).</p>
+              </div>
+
+              <div
+                className={`template-tile ${template === 'BLANK' ? 'active' : ''}`}
+                onClick={() => setTemplate('BLANK')}
+              >
+                <div className="tile-icon-head">
+                  <span className="tile-emoji">📝</span>
+                  <strong>Blank Custom Module</strong>
+                  {template === 'BLANK' && <Check size={16} className="tile-check" />}
+                </div>
+                <p>Start with a clean blank module and add your own custom work items manually.</p>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="modal-actions">
           <button className="secondary-button" type="button" onClick={onClose}>Cancel</button>
