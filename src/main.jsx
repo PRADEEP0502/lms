@@ -45,6 +45,7 @@ import {
   Sparkles,
   Square,
   Target,
+  Trash2,
   Upload,
   User,
   Users,
@@ -239,10 +240,10 @@ function calculateWorkStatus(item) {
 }
 
 function getWorkSetStats(works) {
-  const total = works.length;
-  const completed = works.filter((w) => w.status === 'Completed').length;
-  const learned = works.filter((w) => w.stageA).length;
-  const practical = works.filter((w) => w.stageB || w.stageC).length;
+  const total = works ? works.length : 0;
+  const completed = works ? works.filter((w) => w.status === 'Completed').length : 0;
+  const learned = works ? works.filter((w) => w.stageA).length : 0;
+  const practical = works ? works.filter((w) => w.stageB || w.stageC).length : 0;
   const pending = total - completed;
   const progressPercent = total > 0 ? Math.round((completed / total) * 100) : 0;
   return { total, completed, learned, practical, pending, progressPercent };
@@ -481,24 +482,40 @@ function Portal({ session, onLogout, showToast }) {
       return { ...set, works: [...set.works, itemToAdd] };
     });
     updateWorkSets(updated);
-    showToast('New work item added with video');
+    showToast(`New work item "${newItem.title}" added`);
   };
 
   const hrCreateWorkSet = (newSetData) => {
     const id = `WS-${100 + workSets.length + 1}`;
     const emp = employees.find((e) => e.id === newSetData.employeeId) || employees[0];
+    const worksToUse = newSetData.template === 'BLANK'
+      ? []
+      : defaultWorkItems.map((item) => ({ ...item, stageA: false, stageB: false, stageC: false, status: 'Not Started', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false }));
+
     const newSet = {
       id,
-      name: newSetData.name || 'Data Entry',
+      name: newSetData.name || 'New Practical Work Module',
       employeeId: emp.id,
       employeeName: emp.name,
       department: emp.department,
       assignedDate: new Date().toISOString().split('T')[0],
-      works: defaultWorkItems.map((item) => ({ ...item, stageA: false, stageB: false, stageC: false, status: 'Not Started', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false }))
+      works: worksToUse
     };
     const updated = [...workSets, newSet];
     updateWorkSets(updated);
-    showToast(`Data Entry assigned to ${emp.name}`);
+    showToast(`Work Module "${newSet.name}" created and assigned to ${emp.name}`);
+    return newSet.id;
+  };
+
+  const hrDeleteWorkSet = (workSetId) => {
+    if (workSets.length <= 1) {
+      showToast('Cannot delete the last remaining Work Set.');
+      return;
+    }
+    const targetSet = workSets.find((s) => s.id === workSetId);
+    const updated = workSets.filter((s) => s.id !== workSetId);
+    updateWorkSets(updated);
+    showToast(`Work Module "${targetSet?.name || ''}" deleted`);
   };
 
   const onboardingPercent = Math.round((completed.length / onboardingSections.length) * 100);
@@ -603,6 +620,7 @@ function Portal({ session, onLogout, showToast }) {
           hrUpdateWorkVideo={hrUpdateWorkVideo}
           hrAddWorkItem={hrAddWorkItem}
           hrCreateWorkSet={hrCreateWorkSet}
+          hrDeleteWorkSet={hrDeleteWorkSet}
           setActive={setActive}
         />
       </main>
@@ -688,7 +706,7 @@ function EmployeeContent(props) {
 function EmployeeDashboard({ session, onboardingPercent, trainingItems, workSet, setActive }) {
   const completedSections = Math.round((onboardingPercent / 100) * onboardingSections.length);
   const pendingAssessments = trainingItems.filter((item) => item.type === 'Assessment' && item.progress < 100);
-  const stats = getWorkSetStats(workSet.works);
+  const stats = getWorkSetStats(workSet ? workSet.works : []);
 
   return (
     <div className="dashboard-simple">
@@ -797,7 +815,7 @@ function Onboarding({ completed, markSection, completeAll, percent }) {
 }
 
 // Data Entry Main View Component
-function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, showToast }) {
+function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, showToast, userWorkSets, activeSetId, onSelectSet }) {
   const [search, setSearch] = useState('');
   const [levelFilter, setLevelFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
@@ -806,7 +824,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
   const [selectedVideoWork, setSelectedVideoWork] = useState(null);
   const [hrRecordWork, setHrRecordWork] = useState(null);
 
-  if (!workSet) return <div className="empty">No Data Entry assigned.</div>;
+  if (!workSet) return <div className="empty">No Data Entry Work Sets assigned.</div>;
 
   const stats = getWorkSetStats(workSet.works);
 
@@ -819,6 +837,30 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
 
   return (
     <div className="stack">
+      {/* Module Selector Pill Tabs for Employee if multiple modules assigned */}
+      {role === 'EMPLOYEE' && userWorkSets && userWorkSets.length > 1 && (
+        <div className="employee-module-selector">
+          <span>Your Assigned Work Modules:</span>
+          <div className="module-pill-tabs">
+            {userWorkSets.map((set) => {
+              const setStats = getWorkSetStats(set.works);
+              return (
+                <button
+                  key={set.id}
+                  type="button"
+                  className={`module-pill ${activeSetId === set.id ? 'active' : ''}`}
+                  onClick={() => onSelectSet(set.id)}
+                >
+                  <Layers size={14} />
+                  <span>{set.name}</span>
+                  <span className="pill-count">{setStats.completed}/{setStats.total}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Header Banner */}
       <section className="workset-header-card">
         <div className="workset-header-top">
@@ -965,7 +1007,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
             {filteredWorks.length === 0 ? (
               <tr>
                 <td colSpan={role === 'HR' ? 9 : 8} className="empty-table-cell">
-                  No matching work items found.
+                  No matching work items found in this module.
                 </td>
               </tr>
             ) : (
@@ -1066,7 +1108,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
       {/* Mobile Expandable Cards View */}
       <div className="mobile-cards-container mobile-only">
         {filteredWorks.length === 0 ? (
-          <div className="empty">No matching work items found.</div>
+          <div className="empty">No matching work items found in this module.</div>
         ) : (
           filteredWorks.map((item, index) => (
             <div key={item.id} className={`work-card-mobile ${item.status.toLowerCase().replace(' ', '-')}`}>
@@ -1483,7 +1525,7 @@ function HrPerformanceModal({ target, onClose, onSave }) {
 }
 
 // HR Work Sets Manager View Component
-function HrWorkSetManager({ workSets, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, hrAddWorkItem, hrCreateWorkSet, showToast }) {
+function HrWorkSetManager({ workSets, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, hrAddWorkItem, hrCreateWorkSet, hrDeleteWorkSet, showToast }) {
   const [selectedSetId, setSelectedSetId] = useState(workSets[0]?.id || '');
   const [showAddWorkModal, setShowAddWorkModal] = useState(false);
   const [showCreateSetModal, setShowCreateSetModal] = useState(false);
@@ -1494,24 +1536,24 @@ function HrWorkSetManager({ workSets, toggleWorkStage, hrUpdatePerformance, hrUp
     <div className="stack">
       <section className="section-head">
         <div>
-          <p className="eyebrow">HR TRAINING ADMINISTRATION</p>
-          <h2>Data Entry</h2>
-          <p>Create work sets, assign 20+ data entry items with screen recordings, set difficulty levels, and verify practical performance.</p>
+          <p className="eyebrow">HR WORK MODULE ADMINISTRATION</p>
+          <h2>Practical Training Work Sets & Modules</h2>
+          <p>Create unlimited work modules, add custom work items with screen recordings, set difficulty levels, and evaluate employee performance.</p>
         </div>
         <div className="top-actions">
-          <button className="secondary-button compact" onClick={() => setShowAddWorkModal(true)}>
-            <Plus size={17} /> Add Work Item
-          </button>
           <button className="primary-button compact" onClick={() => setShowCreateSetModal(true)}>
-            <Layers size={17} /> Assign New Work Set
+            <Plus size={17} /> + Create New Work Set / Module
+          </button>
+          <button className="secondary-button compact" onClick={() => setShowAddWorkModal(true)}>
+            <Plus size={17} /> + Add Work Item to Module
           </button>
         </div>
       </section>
 
-      {/* Select Employee Work Set */}
+      {/* Select Employee Work Set & Actions */}
       <div className="workset-selector-bar">
-        <label>
-          Select Employee Work Set:
+        <label className="flex-1">
+          Select Employee Work Set / Module:
           <select value={selectedSetId} onChange={(e) => setSelectedSetId(e.target.value)} className="workset-select">
             {workSets.map((set) => {
               const stats = getWorkSetStats(set.works);
@@ -1523,6 +1565,16 @@ function HrWorkSetManager({ workSets, toggleWorkStage, hrUpdatePerformance, hrUp
             })}
           </select>
         </label>
+        {currentSet && (
+          <button
+            type="button"
+            className="secondary-button compact danger-text"
+            onClick={() => hrDeleteWorkSet(currentSet.id)}
+            title="Delete this Work Set / Module"
+          >
+            <Trash2 size={16} /> Delete Module
+          </button>
+        )}
       </div>
 
       {currentSet ? (
@@ -1535,7 +1587,7 @@ function HrWorkSetManager({ workSets, toggleWorkStage, hrUpdatePerformance, hrUp
           showToast={showToast}
         />
       ) : (
-        <div className="empty">No Work Sets available.</div>
+        <div className="empty">No Work Sets available. Click "+ Create New Work Set / Module" to create one.</div>
       )}
 
       {/* Add Work Item Modal */}
@@ -1552,7 +1604,10 @@ function HrWorkSetManager({ workSets, toggleWorkStage, hrUpdatePerformance, hrUp
         <HrCreateWorkSetModal
           employees={employees}
           onClose={() => setShowCreateSetModal(false)}
-          onCreate={hrCreateWorkSet}
+          onCreate={(data) => {
+            const newId = hrCreateWorkSet(data);
+            if (newId) setSelectedSetId(newId);
+          }}
         />
       )}
     </div>
@@ -1577,8 +1632,8 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
       <form className="process-modal" onSubmit={handleSubmit}>
         <div className="modal-head">
           <div>
-            <h2>Add New Work Item</h2>
-            <p>Add to Data Entry: <strong>{workSet.name}</strong> ({workSet.employeeName})</p>
+            <h2>Add New Work Item to Module</h2>
+            <p>Add to Work Set: <strong>{workSet.name}</strong> ({workSet.employeeName})</p>
           </div>
           <button className="icon-button" type="button" onClick={onClose}>X</button>
         </div>
@@ -1586,7 +1641,7 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
           <label>
             Work Details / Title
             <div className="input-wrap">
-              <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Fabric Inspection Entry" required />
+              <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Spinning Machine Card Entry" required />
             </div>
           </label>
           <label>
@@ -1600,7 +1655,7 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
           <label>
             Work Description & Instructions
             <div className="input-wrap">
-              <input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="e.g. Daily fabric defect log verification" />
+              <input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="e.g. Daily machine parameters & defect log verification" />
             </div>
           </label>
         </div>
@@ -1615,12 +1670,14 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
 
 // Modal: HR Create / Assign Work Set
 function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
-  const [name, setName] = useState('Data Entry');
+  const [name, setName] = useState('');
   const [employeeId, setEmployeeId] = useState(employees[0]?.id || '');
+  const [template, setTemplate] = useState('DEFAULT_20'); // 'DEFAULT_20' | 'BLANK'
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onCreate({ name, employeeId });
+    if (!name.trim()) return;
+    onCreate({ name: name.trim(), employeeId, template });
     onClose();
   };
 
@@ -1629,16 +1686,16 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
       <form className="process-modal" onSubmit={handleSubmit}>
         <div className="modal-head">
           <div>
-            <h2>Assign New Data Entry Work Set</h2>
-            <p>Assign default 20-item Data Entry set with video demos to an employee.</p>
+            <h2>Create & Assign New Work Module</h2>
+            <p>Create a custom practical work training set for an employee.</p>
           </div>
           <button className="icon-button" type="button" onClick={onClose}>X</button>
         </div>
         <div className="modal-fields">
           <label>
-            Work Set Name
+            Work Module / Set Name
             <div className="input-wrap">
-              <input value={name} onChange={(e) => setName(e.target.value)} required />
+              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Spinning Operations / Dyeing Quality / Accounts Data Entry" required />
             </div>
           </label>
           <label>
@@ -1651,10 +1708,17 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
               ))}
             </select>
           </label>
+          <label>
+            Module Template & Work Items
+            <select value={template} onChange={(e) => setTemplate(e.target.value)} className="input-wrap select-input">
+              <option value="DEFAULT_20">⚡ Use 20 Standard Mill Data Entry Items (Compacting, Stenter, Lab, Petrol, etc.)</option>
+              <option value="BLANK">📝 Create Blank Module (Add custom work items manually)</option>
+            </select>
+          </label>
         </div>
         <div className="modal-actions">
           <button className="secondary-button" type="button" onClick={onClose}>Cancel</button>
-          <button className="primary-button" type="submit">Assign Work Set</button>
+          <button className="primary-button" type="submit">Create Work Module</button>
         </div>
       </form>
     </div>
@@ -1663,7 +1727,7 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
 
 // MD Practical Training Analytics Component
 function MdWorkSetOverview({ workSets }) {
-  const allWorks = workSets.flatMap((s) => s.works);
+  const allWorks = workSets.flatMap((s) => s.works || []);
   const total = allWorks.length;
   const completed = allWorks.filter((w) => w.status === 'Completed').length;
   const practical = allWorks.filter((w) => w.status === 'Practical').length;
@@ -1719,7 +1783,7 @@ function MdWorkSetOverview({ workSets }) {
               const stats = getWorkSetStats(set.works);
               return (
                 <div key={set.id} className="md-bar-line">
-                  <span>{set.employeeName}</span>
+                  <span>{set.employeeName} ({set.name})</span>
                   <div className="bar">
                     <span style={{ width: `${stats.progressPercent}%` }} />
                   </div>
@@ -1753,7 +1817,7 @@ function MdWorkSetOverview({ workSets }) {
 }
 
 function HrContent(props) {
-  const { active, session, showToast, trainingItems, setTrainingItems, generatedReports, setGeneratedReports, openModal, workSets, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, hrAddWorkItem, hrCreateWorkSet } = props;
+  const { active, session, showToast, trainingItems, setTrainingItems, generatedReports, setGeneratedReports, openModal, workSets, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, hrAddWorkItem, hrCreateWorkSet, hrDeleteWorkSet } = props;
 
   if (active === 'Employees') return <EmployeesView showToast={showToast} openModal={openModal} />;
   if (active === 'Training' || active === 'Data Entry') {
@@ -1771,6 +1835,7 @@ function HrContent(props) {
         hrUpdateWorkVideo={hrUpdateWorkVideo}
         hrAddWorkItem={hrAddWorkItem}
         hrCreateWorkSet={hrCreateWorkSet}
+        hrDeleteWorkSet={hrDeleteWorkSet}
         initialSubTab="WORK_SET"
       />
     );
@@ -1791,8 +1856,8 @@ function HrDashboard({ showToast, openModal, workSets }) {
     'Upload Material': ['Material title', 'Material type', 'Assigned department'],
     'View Reports': []
   };
-  const totalAssignedWorks = workSets.reduce((sum, set) => sum + set.works.length, 0);
-  const totalCompletedWorks = workSets.reduce((sum, set) => sum + set.works.filter((w) => w.status === 'Completed').length, 0);
+  const totalAssignedWorks = workSets.reduce((sum, set) => sum + (set.works ? set.works.length : 0), 0);
+  const totalCompletedWorks = workSets.reduce((sum, set) => sum + (set.works ? set.works.filter((w) => w.status === 'Completed').length : 0), 0);
 
   return (
     <div className="dashboard-simple">
@@ -1862,7 +1927,7 @@ function MdContent(props) {
 
 function MdDashboard({ approvalItems, workSets }) {
   const pendingApprovals = approvalItems.filter((item) => item.status !== 'Approved').length;
-  const allWorks = workSets.flatMap((s) => s.works);
+  const allWorks = workSets.flatMap((s) => s.works || []);
   const completedRate = Math.round((allWorks.filter((w) => w.status === 'Completed').length / (allWorks.length || 1)) * 100);
 
   return (
@@ -1961,15 +2026,18 @@ function OnboardingMonitor() {
   );
 }
 
-// Unified TrainingView with Sub-Tabs
-function TrainingView({ role, session, showToast, trainingItems = trainings, setTrainingItems, openModal, workSets, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, hrAddWorkItem, hrCreateWorkSet, initialSubTab = 'WORK_SET' }) {
+// Unified TrainingView with Sub-Tabs & Multi-Module Support
+function TrainingView({ role, session, showToast, trainingItems = trainings, setTrainingItems, openModal, workSets, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, hrAddWorkItem, hrCreateWorkSet, hrDeleteWorkSet, initialSubTab = 'WORK_SET' }) {
   const [activeTab, setActiveTab] = useState(initialSubTab);
   const isHr = role === 'HR' || role === 'hr';
   const isMd = role === 'MD' || role === 'md';
   const isEmp = role === 'EMPLOYEE' || role === 'employee';
   const uploadFields = ['Material title', 'Type: video / document / assessment', 'Department', 'Due date'];
 
-  const userSet = workSets ? (workSets.find((s) => s.employeeId === session?.employeeId) || workSets[0]) : null;
+  const userWorkSets = workSets ? workSets.filter((s) => s.employeeId === session?.employeeId) : [];
+  const [empSelectedSetId, setEmpSelectedSetId] = useState(userWorkSets[0]?.id || workSets[0]?.id);
+
+  const activeEmpSet = workSets ? (workSets.find((s) => s.id === empSelectedSetId) || userWorkSets[0] || workSets[0]) : null;
 
   return (
     <div className="stack">
@@ -1996,7 +2064,10 @@ function TrainingView({ role, session, showToast, trainingItems = trainings, set
       {activeTab === 'WORK_SET' ? (
         isEmp ? (
           <DataEntryWorkSetView
-            workSet={userSet}
+            workSet={activeEmpSet}
+            userWorkSets={userWorkSets}
+            activeSetId={empSelectedSetId}
+            onSelectSet={(id) => setEmpSelectedSetId(id)}
             role="EMPLOYEE"
             toggleWorkStage={toggleWorkStage}
             hrUpdateWorkVideo={hrUpdateWorkVideo}
@@ -2010,6 +2081,7 @@ function TrainingView({ role, session, showToast, trainingItems = trainings, set
             hrUpdateWorkVideo={hrUpdateWorkVideo}
             hrAddWorkItem={hrAddWorkItem}
             hrCreateWorkSet={hrCreateWorkSet}
+            hrDeleteWorkSet={hrDeleteWorkSet}
             showToast={showToast}
           />
         ) : (
