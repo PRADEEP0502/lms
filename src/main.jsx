@@ -8,6 +8,7 @@ import {
   BookOpen,
   BriefcaseBusiness,
   CalendarDays,
+  Camera,
   Check,
   CheckCircle2,
   CheckSquare,
@@ -15,11 +16,13 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
+  CircleStop,
   ClipboardCheck,
   Edit3,
   Eye,
   EyeOff,
   FileText,
+  FileVideo,
   Film,
   Filter,
   HeartPulse,
@@ -31,10 +34,12 @@ import {
   LineChart,
   Lock,
   LogOut,
+  Monitor,
   NotebookTabs,
   PanelLeftClose,
   Play,
   Plus,
+  RefreshCw,
   Search,
   ShieldCheck,
   Sparkles,
@@ -175,7 +180,7 @@ const onboardingSections = [
   }
 ];
 
-// Initial 20 Work Items for Data Entry (With Video Links)
+// Initial 20 Work Items for Data Entry
 const defaultWorkItems = [
   { id: 'W-01', title: 'Compacting Card Entry', level: 'L1', description: 'Hard Work — Compacting department daily card entries & log verification', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Compacting Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 92, performanceStatus: 'Excellent', hrRemarks: 'Accurate entry and timely log submission.', hrApproved: true },
   { id: 'W-02', title: 'Stenter Job Card Entry', level: 'L1', description: 'Hard Work — Stenter machine job card parameters logging', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Stenter Job Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 88, performanceStatus: 'Good', hrRemarks: 'Verified against machine output logs.', hrApproved: true },
@@ -450,7 +455,7 @@ function Portal({ session, onLogout, showToast }) {
       return { ...set, works: updatedWorks };
     });
     updateWorkSets(updated);
-    showToast('Training video link updated');
+    showToast('Screen recording / video updated');
   };
 
   const hrAddWorkItem = (workSetId, newItem) => {
@@ -791,7 +796,7 @@ function Onboarding({ completed, markSection, completeAll, percent }) {
   );
 }
 
-// Data Entry Main View Component (With Video Support)
+// Data Entry Main View Component
 function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, showToast }) {
   const [search, setSearch] = useState('');
   const [levelFilter, setLevelFilter] = useState('ALL');
@@ -799,6 +804,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
   const [showHelp, setShowHelp] = useState(true);
   const [selectedWorkForHr, setSelectedWorkForHr] = useState(null);
   const [selectedVideoWork, setSelectedVideoWork] = useState(null);
+  const [hrRecordWork, setHrRecordWork] = useState(null);
 
   if (!workSet) return <div className="empty">No Data Entry assigned.</div>;
 
@@ -945,14 +951,14 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
           <thead>
             <tr>
               <th style={{ width: '50px' }}>S.No</th>
-              <th>Work Details & Training Video</th>
+              <th>Work Details & Screen Video</th>
               <th style={{ width: '100px' }}>Level</th>
               <th style={{ width: '60px', textAlign: 'center' }} title="A — Learned">A</th>
               <th style={{ width: '60px', textAlign: 'center' }} title="B — Practical Data Entry">B</th>
               <th style={{ width: '60px', textAlign: 'center' }} title="C — Practical Data Entry for 4 days">C</th>
               <th style={{ width: '180px' }}>Performance</th>
               <th style={{ width: '120px' }}>Status</th>
-              {role === 'HR' && <th style={{ width: '100px' }}>HR Action</th>}
+              {role === 'HR' && <th style={{ width: '120px' }}>HR Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -972,11 +978,11 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
                       <button
                         type="button"
                         className={`video-btn ${role === 'HR' ? 'hr-btn' : ''}`}
-                        onClick={() => setSelectedVideoWork(item)}
-                        title={role === 'HR' ? 'Add or Edit video link for employees' : 'Watch practical demo video for this task'}
+                        onClick={() => role === 'HR' ? setHrRecordWork(item) : setSelectedVideoWork(item)}
+                        title={role === 'HR' ? 'Record screen or upload video file for employees' : 'Watch screen recording video for this task'}
                       >
-                        {role === 'HR' ? <Video size={13} /> : <Play size={12} />}
-                        {role === 'HR' ? 'Add/Edit Video' : 'Watch Video'}
+                        {role === 'HR' ? <Camera size={13} /> : <Play size={12} />}
+                        {role === 'HR' ? 'Record/Upload Video' : 'Watch Video'}
                       </button>
                     </div>
                     <p className="work-desc">{item.description}</p>
@@ -1043,9 +1049,9 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
                         </button>
                         <button
                           className="link-button compact text-xs"
-                          onClick={() => setSelectedVideoWork(item)}
+                          onClick={() => setHrRecordWork(item)}
                         >
-                          <Video size={13} /> Edit Video
+                          <Camera size={13} /> Record Video
                         </button>
                       </div>
                     </td>
@@ -1076,10 +1082,10 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
               <button
                 type="button"
                 className="mobile-video-btn"
-                onClick={() => setSelectedVideoWork(item)}
+                onClick={() => role === 'HR' ? setHrRecordWork(item) : setSelectedVideoWork(item)}
               >
-                {role === 'HR' ? <Video size={14} /> : <Play size={14} />}
-                {role === 'HR' ? 'Add / Edit Training Video' : 'Watch Training Video Demo'}
+                {role === 'HR' ? <Camera size={14} /> : <Play size={14} />}
+                {role === 'HR' ? 'Record / Upload Screen Video' : 'Watch Training Video Demo'}
               </button>
 
               {/* Mobile Stage Checkboxes */}
@@ -1136,15 +1142,23 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
         )}
       </div>
 
-      {/* Video Player Modal */}
+      {/* Employee Video Player Modal */}
       {selectedVideoWork && (
         <WorkVideoModal
           item={selectedVideoWork}
-          role={role}
           onClose={() => setSelectedVideoWork(null)}
-          onUpdateVideo={(workId, newUrl) => {
-            if (hrUpdateWorkVideo) hrUpdateWorkVideo(workSet.id, workId, newUrl);
+        />
+      )}
+
+      {/* HR Screen Record & File Upload Modal */}
+      {hrRecordWork && (
+        <HrScreenRecordAndUploadModal
+          item={hrRecordWork}
+          onClose={() => setHrRecordWork(null)}
+          onSaveVideo={(workId, newVideoUrl) => {
+            if (hrUpdateWorkVideo) hrUpdateWorkVideo(workSet.id, workId, newVideoUrl);
           }}
+          showToast={showToast}
         />
       )}
 
@@ -1160,20 +1174,12 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
   );
 }
 
-// Training Video Modal Component
-function WorkVideoModal({ item, onClose, role, onUpdateVideo }) {
-  const [editing, setEditing] = useState(false);
-  const [videoUrl, setVideoUrl] = useState(item.videoUrl || '');
+// Training Video Modal Component (For Watching Screen Recordings / Videos)
+function WorkVideoModal({ item, onClose }) {
+  const videoUrl = item.videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+  const isDirectVideo = videoUrl.startsWith('data:video') || videoUrl.startsWith('blob:') || videoUrl.endsWith('.mp4') || videoUrl.endsWith('.webm') || videoUrl.endsWith('.mov');
 
-  const handleSaveVideo = (e) => {
-    e.preventDefault();
-    if (onUpdateVideo) {
-      onUpdateVideo(item.id, videoUrl);
-    }
-    setEditing(false);
-  };
-
-  let embedUrl = videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+  let embedUrl = videoUrl;
   if (embedUrl.includes('watch?v=')) {
     embedUrl = embedUrl.replace('watch?v=', 'embed/');
   }
@@ -1185,7 +1191,7 @@ function WorkVideoModal({ item, onClose, role, onUpdateVideo }) {
           <div>
             <div className="workset-badge-group margin-bottom-xs">
               <span className={`badge-level ${item.level.toLowerCase()}`}>{item.level}</span>
-              <span className="badge-pill primary">Practical Training Video</span>
+              <span className="badge-pill primary">Screen Recording Demo Video</span>
             </div>
             <h2>{item.title}</h2>
             <p>{item.description}</p>
@@ -1195,8 +1201,8 @@ function WorkVideoModal({ item, onClose, role, onUpdateVideo }) {
 
         {/* Video Player Frame */}
         <div className="video-player-container">
-          {embedUrl.endsWith('.mp4') || embedUrl.endsWith('.webm') ? (
-            <video controls src={embedUrl} className="video-element" autoPlay>
+          {isDirectVideo ? (
+            <video controls src={videoUrl} className="video-element" autoPlay>
               Your browser does not support video playback.
             </video>
           ) : (
@@ -1210,35 +1216,204 @@ function WorkVideoModal({ item, onClose, role, onUpdateVideo }) {
           )}
         </div>
 
-        {/* HR Edit Video Link Form */}
-        {role === 'HR' && (
-          <div className="hr-video-edit-bar">
-            {editing ? (
-              <form onSubmit={handleSaveVideo} className="video-edit-form">
-                <input
-                  type="text"
-                  value={videoUrl}
-                  onChange={(e) => setVideoUrl(e.target.value)}
-                  placeholder="Paste YouTube embed URL or MP4 video link..."
-                  className="input-wrap flex-1"
-                />
-                <button type="submit" className="primary-button compact">Save Video Link</button>
-                <button type="button" className="secondary-button compact" onClick={() => setEditing(false)}>Cancel</button>
-              </form>
-            ) : (
-              <button className="link-button" type="button" onClick={() => setEditing(true)}>
-                <Edit3 size={14} /> Edit Video Link (HR Only)
-              </button>
-            )}
-          </div>
-        )}
-
         <div className="video-modal-footer">
           <div className="video-instruction-note">
             <Info size={16} />
-            <span>Watch the practical video demo carefully before logging entries on the system.</span>
+            <span>Watch the practical screen recording demo carefully before logging entries on the system.</span>
           </div>
           <button className="primary-button compact" type="button" onClick={onClose}>Close Video</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// HR Screen Recording & Video File Upload Modal
+function HrScreenRecordAndUploadModal({ item, onClose, onSaveVideo, showToast }) {
+  const [activeTab, setActiveTab] = useState('UPLOAD'); // 'UPLOAD' | 'RECORD'
+  const [videoUrl, setVideoUrl] = useState(item.videoUrl || '');
+  const [recording, setRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [recordTime, setRecordTime] = useState(0);
+  const [timerInterval, setTimerInterval] = useState(null);
+  const [fileName, setFileName] = useState('');
+
+  // Handle Video File Upload
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('video/')) {
+      alert('Please select a valid video file (.mp4, .webm, .mov)');
+      return;
+    }
+    setFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setVideoUrl(event.target.result);
+      if (showToast) showToast(`Selected video: ${file.name}`);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Start Screen Recording using Web API
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: { cursor: 'always' },
+        audio: true
+      });
+
+      const recorder = new MediaRecorder(stream);
+      const chunks = [];
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunks.push(e.data);
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setVideoUrl(reader.result);
+          if (showToast) showToast('Screen recording captured successfully!');
+        };
+        reader.readAsDataURL(blob);
+        setRecording(false);
+        stream.getTracks().forEach((track) => track.stop());
+      };
+
+      recorder.start();
+      setMediaRecorder(recorder);
+      setRecording(true);
+
+      setRecordTime(0);
+      const interval = setInterval(() => {
+        setRecordTime((t) => t + 1);
+      }, 1000);
+      setTimerInterval(interval);
+
+      stream.getVideoTracks()[0].onended = () => {
+        if (recorder.state !== 'inactive') recorder.stop();
+        clearInterval(interval);
+      };
+    } catch (err) {
+      console.log('Screen recording cancelled or not supported:', err);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder && recording) {
+      mediaRecorder.stop();
+    }
+    if (timerInterval) clearInterval(timerInterval);
+  };
+
+  const handleSave = () => {
+    if (onSaveVideo) {
+      onSaveVideo(item.id, videoUrl);
+    }
+    onClose();
+  };
+
+  const formatTime = (secs) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  };
+
+  const isDirectVideo = videoUrl.startsWith('data:video') || videoUrl.startsWith('blob:') || videoUrl.endsWith('.mp4') || videoUrl.endsWith('.webm') || videoUrl.endsWith('.mov');
+
+  return (
+    <div className="modal-backdrop" role="presentation">
+      <div className="video-modal">
+        <div className="video-modal-head">
+          <div>
+            <div className="workset-badge-group margin-bottom-xs">
+              <span className={`badge-level ${item.level.toLowerCase()}`}>{item.level}</span>
+              <span className="badge-pill primary">HR Screen Video Uploader</span>
+            </div>
+            <h2>Screen Recording / Video Upload</h2>
+            <p>Task: <strong>{item.title}</strong> — Add a live screen recording or video file for employees.</p>
+          </div>
+          <button className="icon-button" type="button" onClick={onClose}>X</button>
+        </div>
+
+        {/* Tab Selection: Upload File vs Record Screen */}
+        <div className="hr-video-tab-bar">
+          <button
+            type="button"
+            className={`hr-video-tab ${activeTab === 'UPLOAD' ? 'active' : ''}`}
+            onClick={() => setActiveTab('UPLOAD')}
+          >
+            <Upload size={16} /> Upload Video File (.mp4, .webm)
+          </button>
+          <button
+            type="button"
+            className={`hr-video-tab ${activeTab === 'RECORD' ? 'active' : ''}`}
+            onClick={() => setActiveTab('RECORD')}
+          >
+            <Monitor size={16} /> Record Screen Live
+          </button>
+        </div>
+
+        {activeTab === 'UPLOAD' ? (
+          <div className="upload-dropzone">
+            <FileVideo size={38} className="text-muted margin-bottom-xs" />
+            <h3>Select Screen Recording Video File</h3>
+            <p>Upload any recorded video file (.mp4, .webm, .mov) from your device.</p>
+            <label className="primary-button compact cursor-pointer margin-top-xs">
+              <Upload size={16} /> Select Screen Video File
+              <input type="file" accept="video/*" onChange={handleFileChange} style={{ display: 'none' }} />
+            </label>
+            {fileName && <p className="file-name-tag"><Check size={14} /> Selected: {fileName}</p>}
+          </div>
+        ) : (
+          <div className="screen-record-box">
+            <div className="record-status-head">
+              <Monitor size={28} />
+              <div>
+                <h3>Live Screen Recording</h3>
+                <p>Record your screen live while demonstrating data entry on the computer.</p>
+              </div>
+            </div>
+
+            <div className="record-controls-row">
+              {!recording ? (
+                <button type="button" className="primary-button danger-theme" onClick={startRecording}>
+                  <Camera size={18} /> Start Screen Recording
+                </button>
+              ) : (
+                <div className="recording-active-bar">
+                  <span className="pulsing-red-dot" />
+                  <strong>Recording Screen: {formatTime(recordTime)}</strong>
+                  <button type="button" className="primary-button compact" onClick={stopRecording}>
+                    <CircleStop size={16} /> Stop Recording
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Video Preview */}
+        {videoUrl && (
+          <div className="video-preview-container">
+            <h4>Captured Video Preview:</h4>
+            <div className="video-player-container">
+              {isDirectVideo ? (
+                <video controls src={videoUrl} className="video-element" />
+              ) : (
+                <iframe src={videoUrl} title="Video Preview" className="video-iframe" />
+              )}
+            </div>
+          </div>
+        )}
+
+        <div className="modal-actions margin-top-sm">
+          <button className="secondary-button" type="button" onClick={onClose}>Cancel</button>
+          <button className="primary-button" type="button" onClick={handleSave} disabled={!videoUrl}>
+            <Check size={16} /> Save Video to Task
+          </button>
         </div>
       </div>
     </div>
@@ -1288,12 +1463,6 @@ function HrPerformanceModal({ target, onClose, onSave }) {
             </div>
           </label>
           <label>
-            Training Video Link (YouTube embed or MP4 URL)
-            <div className="input-wrap">
-              <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="e.g. https://www.youtube.com/embed/..." />
-            </div>
-          </label>
-          <label>
             HR Remarks / Observations
             <div className="input-wrap">
               <textarea rows={3} value={remarks} onChange={(e) => setRemarks(e.target.value)} placeholder="Enter HR comments or practical feedback..." style={{ width: '100%', border: 0, outline: 0, background: 'transparent', padding: '8px 0', fontFamily: 'inherit' }} />
@@ -1327,7 +1496,7 @@ function HrWorkSetManager({ workSets, toggleWorkStage, hrUpdatePerformance, hrUp
         <div>
           <p className="eyebrow">HR TRAINING ADMINISTRATION</p>
           <h2>Data Entry</h2>
-          <p>Create work sets, assign 20+ data entry items with video demos, set difficulty levels, and verify practical performance.</p>
+          <p>Create work sets, assign 20+ data entry items with screen recordings, set difficulty levels, and verify practical performance.</p>
         </div>
         <div className="top-actions">
           <button className="secondary-button compact" onClick={() => setShowAddWorkModal(true)}>
@@ -1395,12 +1564,11 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
   const [title, setTitle] = useState('');
   const [level, setLevel] = useState('L2');
   const [description, setDescription] = useState('');
-  const [videoUrl, setVideoUrl] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title.trim()) return;
-    onAdd(workSet.id, { title, level, description, videoUrl });
+    onAdd(workSet.id, { title, level, description });
     onClose();
   };
 
@@ -1433,12 +1601,6 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
             Work Description & Instructions
             <div className="input-wrap">
               <input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="e.g. Daily fabric defect log verification" />
-            </div>
-          </label>
-          <label>
-            Training Video Link (YouTube embed or MP4 URL)
-            <div className="input-wrap">
-              <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="e.g. https://www.youtube.com/embed/..." />
             </div>
           </label>
         </div>
@@ -1648,7 +1810,7 @@ function HrDashboard({ showToast, openModal, workSets }) {
       </div>
       <div className="simple-two-column">
         <SimpleCard icon={History} title="Recent Employee Activity">
-          <SimpleList items={['Arun watched Compacting Card Entry training video', 'Nisha completed Accounts Data Entry', 'Rahul onboarding in grace review']} />
+          <SimpleList items={['Arun watched Compacting Card Entry screen recording video', 'Nisha completed Accounts Data Entry', 'Rahul onboarding in grace review']} />
         </SimpleCard>
         <SimpleCard icon={BriefcaseBusiness} title="Quick Actions">
           <div className="quick-actions">
