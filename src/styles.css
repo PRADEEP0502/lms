@@ -454,22 +454,25 @@ label {
   gap: 10px;
   min-height: 42px;
   border: 0;
-  border-radius: var(--radius-small);
+  border-radius: 10px;
   background: transparent;
   color: var(--secondary);
-  padding: 0 13px;
+  padding: 0 14px;
   text-align: left;
   font-weight: 550;
+  transition: all 180ms ease;
 }
 
-.sidebar nav button.active,
-.sidebar nav button:hover {
-  background: rgba(0, 122, 255, 0.1);
-  color: var(--primary);
+.sidebar nav button:hover:not(.active) {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--text);
 }
 
 .sidebar nav button.active {
-  box-shadow: inset 3px 0 0 var(--primary);
+  background: rgba(0, 122, 255, 0.12);
+  color: var(--primary);
+  font-weight: 650;
+  box-shadow: inset 0 0 0 1.5px rgba(0, 122, 255, 0.25);
 }
 
 .sidebar nav button:disabled {
