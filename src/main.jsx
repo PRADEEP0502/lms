@@ -46,6 +46,7 @@ import {
   Square,
   Target,
   Trash2,
+  Truck,
   Upload,
   User,
   Users,
@@ -95,7 +96,7 @@ const employees = [
   { id: 'EMP-1042', name: 'Arun Prakash', department: 'Production', role: 'Process Associate', onboarding: 80, training: 64, assessment: 78, status: 'Active' },
   { id: 'EMP-1087', name: 'Nisha Raj', department: 'Office', role: 'Accounts Executive', onboarding: 100, training: 92, assessment: 88, status: 'Active' },
   { id: 'EMP-1113', name: 'Rahul S', department: 'Quality', role: 'QC Analyst', onboarding: 60, training: 48, assessment: 71, status: 'Grace Review' },
-  { id: 'EMP-1199', name: 'Priya K', department: 'Production', role: 'Line Coordinator', onboarding: 100, training: 86, assessment: 91, status: 'Active' }
+  { id: 'EMP-1199', name: 'Priya K', department: 'Dispatch', role: 'Logistics Officer', onboarding: 100, training: 86, assessment: 91, status: 'Active' }
 ];
 
 const trainings = [
@@ -107,7 +108,7 @@ const trainings = [
 const notifications = [
   'Onboarding policy acknowledgement pending.',
   'Production Safety Essentials assigned for this month.',
-  'Data Entry (20 works) with demo videos assigned inside My Training.',
+  'Practical training tasks assigned across Data Entry & Dispatch roles.',
   'Assessment window closes on Sep 05.'
 ];
 
@@ -181,7 +182,7 @@ const onboardingSections = [
   }
 ];
 
-// Initial 20 Work Items for Data Entry
+// Initial 20 Work Items for Data Entry Role
 const defaultWorkItems = [
   { id: 'W-01', title: 'Compacting Card Entry', level: 'L1', description: 'Hard Work — Compacting department daily card entries & log verification', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Compacting Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 92, performanceStatus: 'Excellent', hrRemarks: 'Accurate entry and timely log submission.', hrApproved: true },
   { id: 'W-02', title: 'Stenter Job Card Entry', level: 'L1', description: 'Hard Work — Stenter machine job card parameters logging', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Stenter Job Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 88, performanceStatus: 'Good', hrRemarks: 'Verified against machine output logs.', hrApproved: true },
@@ -205,6 +206,15 @@ const defaultWorkItems = [
   { id: 'W-20', title: 'Production Card Upload to OD', level: 'L3', description: 'Easy Work — OD drive upload of daily production scans', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Production Card Upload Demo', stageA: false, stageB: false, stageC: false, status: 'Not Started', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false }
 ];
 
+// Initial Work Items for Dispatch Role
+const dispatchWorkItems = [
+  { id: 'W-01', title: 'Dispatch Vehicle Log Verification', level: 'L1', description: 'Hard Work — Outgoing truck logs, driver trip sheets & transport invoices audit', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Dispatch Vehicle Log Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 95, performanceStatus: 'Excellent', hrRemarks: 'Accurate trip sheet verification.', hrApproved: true },
+  { id: 'W-02', title: 'Transport Freight Invoice Tallying', level: 'L1', description: 'Hard Work — Cross-checking agency freight invoices with weighbridge slips', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Freight Invoice Tally Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 88, performanceStatus: 'Good', hrRemarks: 'Under observation.', hrApproved: false },
+  { id: 'W-03', title: 'Outward Delivery Challan Entry', level: 'L2', description: 'Medium Work — Logging outward delivery challans, PO numbers & gate passes', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Delivery Challan Demo', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
+  { id: 'W-04', title: 'Loading Inspection & Tare Weight Audit', level: 'L2', description: 'Medium Work — Gross vs tare weight inspection before vehicle exit', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Weight Audit Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 92, performanceStatus: 'Excellent', hrRemarks: '', hrApproved: true },
+  { id: 'W-05', title: 'Daily Gate Movement Register Audit', level: 'L3', description: 'Easy Work — Verifying daily gate inward & outward vehicle entry registers', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Gate Register Audit Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 96, performanceStatus: 'Excellent', hrRemarks: '', hrApproved: true }
+];
+
 const initialWorkSets = [
   {
     id: 'WS-101',
@@ -217,12 +227,21 @@ const initialWorkSets = [
   },
   {
     id: 'WS-102',
-    name: 'Data Entry',
+    name: 'Dispatch & Logistics',
+    employeeId: 'EMP-1199',
+    employeeName: 'Priya K',
+    department: 'Dispatch',
+    assignedDate: '2026-08-18',
+    works: dispatchWorkItems
+  },
+  {
+    id: 'WS-103',
+    name: 'HR & Administration',
     employeeId: 'EMP-1087',
     employeeName: 'Nisha Raj',
     department: 'Office',
-    assignedDate: '2026-08-18',
-    works: defaultWorkItems.slice(0, 15).map(item => ({ ...item, stageA: true, stageB: true, stageC: true, status: 'Completed', score: 95, hrApproved: true }))
+    assignedDate: '2026-08-20',
+    works: defaultWorkItems.slice(14, 20).map(item => ({ ...item, stageA: true, stageB: true, stageC: false, status: 'Practical', score: 90, hrApproved: false }))
   }
 ];
 
@@ -324,11 +343,11 @@ function LoginPage({ onLogin }) {
         <div className="login-copy">
           <p className="eyebrow">Enterprise learning and onboarding</p>
           <h1>Junior Processing Mill LMS Portal</h1>
-          <p>Secure role-based access for mill employee onboarding, assigned training, practical data entry work sets, assessments, and leadership reporting.</p>
+          <p>Secure role-based access for mill employee onboarding, assigned training, practical role tasks (Data Entry, Dispatch, HR, QC), assessments, and leadership reporting.</p>
         </div>
         <div className="login-stats">
           <StatCard value="92%" label="Training completion" />
-          <StatCard value="20" label="Data Entry works" />
+          <StatCard value="Multi-Role" label="Data Entry, Dispatch, HR" />
           <StatCard value="3" label="Authorized roles" />
         </div>
       </section>
@@ -390,7 +409,7 @@ function Portal({ session, onLogout, showToast }) {
   const [generatedReports, setGeneratedReports] = useState([]);
   const [approvalItems, setApprovalItems] = useState([
     { id: 'report', text: 'Approve monthly learning report', status: 'Ready' },
-    { id: 'workset', text: 'Approve Data Entry evaluation grades', status: 'Review' },
+    { id: 'workset', text: 'Approve Data Entry & Dispatch evaluations', status: 'Review' },
     { id: 'grace', text: 'Review 4 grace-period cases', status: 'Review' },
     { id: 'budget', text: 'Approve training budget recommendation', status: 'Pending' }
   ]);
@@ -482,19 +501,23 @@ function Portal({ session, onLogout, showToast }) {
       return { ...set, works: [...(set.works || []), itemToAdd] };
     });
     updateWorkSets(updated);
-    showToast(`New work item "${newItem.title}" added`);
+    showToast(`New task "${newItem.title}" added`);
   };
 
   const hrCreateWorkSet = (newSetData) => {
     const id = `WS-${100 + workSets.length + 1}`;
     const emp = employees.find((e) => e.id === newSetData.employeeId) || employees[0];
-    const worksToUse = newSetData.template === 'BLANK'
-      ? []
-      : defaultWorkItems.map((item) => ({ ...item, stageA: false, stageB: false, stageC: false, status: 'Not Started', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false }));
+    
+    let worksToUse = [];
+    if (newSetData.template === 'DEFAULT_DISPATCH') {
+      worksToUse = dispatchWorkItems.map((item) => ({ ...item, stageA: false, stageB: false, stageC: false, status: 'Not Started', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false }));
+    } else if (newSetData.template === 'DEFAULT_20') {
+      worksToUse = defaultWorkItems.map((item) => ({ ...item, stageA: false, stageB: false, stageC: false, status: 'Not Started', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false }));
+    }
 
     const newSet = {
       id,
-      name: newSetData.name || 'Data Entry',
+      name: newSetData.name || 'Custom Role Tasks',
       employeeId: emp.id,
       employeeName: emp.name,
       department: emp.department,
@@ -503,19 +526,19 @@ function Portal({ session, onLogout, showToast }) {
     };
     const updated = [...workSets, newSet];
     updateWorkSets(updated);
-    showToast(`Data Entry "${newSet.name}" created and assigned to ${emp.name}`);
+    showToast(`Role / Category "${newSet.name}" created and assigned to ${emp.name}`);
     return newSet.id;
   };
 
   const hrDeleteWorkSet = (workSetId) => {
     if (workSets.length <= 1) {
-      showToast('Cannot delete the last remaining Data Entry.');
+      showToast('Cannot delete the last remaining Role Category.');
       return;
     }
     const targetSet = workSets.find((s) => s.id === workSetId);
     const updated = workSets.filter((s) => s.id !== workSetId);
     updateWorkSets(updated);
-    showToast(`Data Entry "${targetSet?.name || ''}" deleted`);
+    showToast(`Role / Category "${targetSet?.name || ''}" deleted`);
   };
 
   const onboardingPercent = Math.round((completed.length / onboardingSections.length) * 100);
@@ -725,7 +748,7 @@ function EmployeeDashboard({ session, onboardingPercent, trainingItems, workSet,
             {completedSections} of {onboardingSections.length} sections completed
           </p>
         </SimpleCard>
-        <SimpleCard icon={Layers} title="Data Entry">
+        <SimpleCard icon={Layers} title="Assigned Role Practical Tasks">
           <div className="workset-mini-summary">
             <div className="workset-mini-val">
               <strong>{stats.completed} / {stats.total}</strong>
@@ -735,7 +758,7 @@ function EmployeeDashboard({ session, onboardingPercent, trainingItems, workSet,
               <span style={{ width: `${stats.progressPercent}%` }} />
             </div>
             <button className="link-button" type="button" onClick={() => setActive('My Training')}>
-              Open Data Entry in My Training →
+              Open My Training Tasks →
             </button>
           </div>
         </SimpleCard>
@@ -813,8 +836,8 @@ function Onboarding({ completed, markSection, completeAll, percent }) {
   );
 }
 
-// Data Entry Main View Component
-function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, showToast, userWorkSets, activeSetId, onSelectSet }) {
+// Main View Component for Role Tasks
+function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, showToast }) {
   const [search, setSearch] = useState('');
   const [levelFilter, setLevelFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
@@ -823,7 +846,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
   const [selectedVideoWork, setSelectedVideoWork] = useState(null);
   const [hrRecordWork, setHrRecordWork] = useState(null);
 
-  if (!workSet) return <div className="empty">No Data Entry Work Sets assigned.</div>;
+  if (!workSet) return <div className="empty">No practical tasks assigned for this role.</div>;
 
   const stats = getWorkSetStats(workSet.works);
 
@@ -841,7 +864,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
         <div className="workset-header-top">
           <div>
             <div className="workset-badge-group">
-              <span className="badge-pill primary">Practical Training</span>
+              <span className="badge-pill primary">Practical Role Training</span>
               <span className="badge-pill secondary">Assigned: {workSet.assignedDate}</span>
             </div>
             <h2>{workSet.name}</h2>
@@ -852,7 +875,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
           <div className="workset-progress-ring-box">
             <div className="workset-progress-big">
               <strong>{stats.completed} / {stats.total}</strong>
-              <span>Works Completed</span>
+              <span>Tasks Completed</span>
             </div>
             <div className="workset-progress-bar-wrap">
               <div className="workset-progress-bar">
@@ -867,7 +890,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
         <div className="workset-stats-grid">
           <div className="workset-stat-pill">
             <span className="stat-num">{stats.total}</span>
-            <span className="stat-lbl">Total Works</span>
+            <span className="stat-lbl">Total Tasks</span>
           </div>
           <div className="workset-stat-pill learned">
             <span className="stat-num">{stats.learned}</span>
@@ -909,24 +932,24 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
                   <strong className="chip-stage a">A — Learned</strong> Initial training & theoretical understanding completed.
                 </li>
                 <li>
-                  <strong className="chip-stage b">B — Practical Data Entry</strong> Active live data entry performed under observation.
+                  <strong className="chip-stage b">B — Practical Execution</strong> Active live work performed under observation.
                 </li>
                 <li>
-                  <strong className="chip-stage c">C — Practical for 4 Days</strong> Consistent error-free data entry maintained for 4 consecutive days.
+                  <strong className="chip-stage c">C — Practical for 4 Days</strong> Consistent error-free execution maintained for 4 consecutive days.
                 </li>
               </ul>
             </div>
             <div className="help-column">
-              <h4>Work Difficulty Levels</h4>
+              <h4>Task Difficulty Levels</h4>
               <ul className="help-level-list">
                 <li>
-                  <span className="badge-level l1">L1 — Hard Work</span> Complex multi-variable mill entries (Compacting, Stenter, Petrol).
+                  <span className="badge-level l1">L1 — Hard Work</span> Complex multi-variable mill tasks (Compacting, Stenter, Vehicle Logs).
                 </li>
                 <li>
-                  <span className="badge-level l2">L2 — Medium Work</span> Standard lab cards & batch format logging (LRN, LDN, QAD).
+                  <span className="badge-level l2">L2 — Medium Work</span> Standard lab cards, delivery challans & format logging.
                 </li>
                 <li>
-                  <span className="badge-level l3">L3 — Easy Work</span> Routine register audits & follow-ups (Lab RL, Book Prep, ABC).
+                  <span className="badge-level l3">L3 — Easy Work</span> Routine register audits & follow-ups (Lab RL, Gate Movement).
                 </li>
               </ul>
             </div>
@@ -938,7 +961,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
       <div className="workset-toolbar">
         <div className="search flex-1">
           <Search size={17} />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search work title or description..." />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search task title or description..." />
         </div>
         <div className="filter-group">
           <div className="select-wrap">
@@ -968,11 +991,11 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
           <thead>
             <tr>
               <th style={{ width: '50px' }}>S.No</th>
-              <th>Work Details & Screen Video</th>
+              <th>Task Details & Video Demo</th>
               <th style={{ width: '100px' }}>Level</th>
               <th style={{ width: '60px', textAlign: 'center' }} title="A — Learned">A</th>
-              <th style={{ width: '60px', textAlign: 'center' }} title="B — Practical Data Entry">B</th>
-              <th style={{ width: '60px', textAlign: 'center' }} title="C — Practical Data Entry for 4 days">C</th>
+              <th style={{ width: '60px', textAlign: 'center' }} title="B — Practical Entry">B</th>
+              <th style={{ width: '60px', textAlign: 'center' }} title="C — Practical Entry for 4 days">C</th>
               <th style={{ width: '180px' }}>Performance</th>
               <th style={{ width: '120px' }}>Status</th>
               {role === 'HR' && <th style={{ width: '120px' }}>HR Actions</th>}
@@ -982,7 +1005,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
             {filteredWorks.length === 0 ? (
               <tr>
                 <td colSpan={role === 'HR' ? 9 : 8} className="empty-table-cell">
-                  No matching work items found in this module.
+                  No matching tasks found for this role.
                 </td>
               </tr>
             ) : (
@@ -1083,7 +1106,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
       {/* Mobile Expandable Cards View */}
       <div className="mobile-cards-container mobile-only">
         {filteredWorks.length === 0 ? (
-          <div className="empty">No matching work items found in this module.</div>
+          <div className="empty">No matching tasks found for this role.</div>
         ) : (
           filteredWorks.map((item, index) => (
             <div key={item.id} className={`work-card-mobile ${item.status.toLowerCase().replace(' ', '-')}`}>
@@ -1236,7 +1259,7 @@ function WorkVideoModal({ item, onClose }) {
         <div className="video-modal-footer">
           <div className="video-instruction-note">
             <Info size={16} />
-            <span>Watch the practical screen recording demo carefully before logging entries on the system.</span>
+            <span>Watch the practical screen recording demo carefully before performing tasks.</span>
           </div>
           <button className="primary-button compact" type="button" onClick={onClose}>Close Video</button>
         </div>
@@ -1390,7 +1413,7 @@ function HrScreenRecordAndUploadModal({ item, onClose, onSaveVideo, showToast })
               <Monitor size={28} />
               <div>
                 <h3>Live Screen Recording</h3>
-                <p>Record your screen live while demonstrating data entry on the computer.</p>
+                <p>Record your screen live while demonstrating work on the computer.</p>
               </div>
             </div>
 
@@ -1458,7 +1481,7 @@ function HrPerformanceModal({ target, onClose, onSave }) {
         <div className="modal-head">
           <div>
             <h2>HR Performance Evaluation</h2>
-            <p>Work Item: <strong>{item.title}</strong> ({item.level})</p>
+            <p>Task: <strong>{item.title}</strong> ({item.level})</p>
           </div>
           <button className="icon-button" type="button" onClick={onClose}>X</button>
         </div>
@@ -1507,16 +1530,16 @@ function HrWorkSetManager({ workSets, currentSet, onSelectSetId, toggleWorkStage
     <div className="stack">
       <section className="section-head">
         <div>
-          <p className="eyebrow">HR DATA ENTRY ADMINISTRATION</p>
-          <h2>Data Entry</h2>
-          <p>Create data entry sets, add custom work items with screen recordings, set difficulty levels, and evaluate employee performance.</p>
+          <p className="eyebrow">HR PRACTICAL TASK ADMINISTRATION</p>
+          <h2>Role & Category Practical Tasks</h2>
+          <p>Create practical training tasks for any role (Data Entry, Dispatch, HR, QC, Accounts), add video demos, set difficulty levels, and evaluate employee performance.</p>
         </div>
         <div className="top-actions">
           <button className="primary-button compact" onClick={onOpenCreateModal}>
-            <Plus size={17} /> + Create Data Entry
+            <Plus size={17} /> + Create Role / Category
           </button>
           <button className="secondary-button compact" onClick={() => setShowAddWorkModal(true)}>
-            <Plus size={17} /> + Add Work Item
+            <Plus size={17} /> + Add Task to Category
           </button>
         </div>
       </section>
@@ -1524,7 +1547,7 @@ function HrWorkSetManager({ workSets, currentSet, onSelectSetId, toggleWorkStage
       {/* Select Employee Work Set & Actions */}
       <div className="workset-selector-bar">
         <label className="flex-1">
-          Select Employee Data Entry:
+          Select Employee Assigned Role Category:
           <select value={currentSet?.id || ''} onChange={(e) => onSelectSetId(e.target.value)} className="workset-select">
             {workSets.map((set) => {
               const stats = getWorkSetStats(set.works);
@@ -1541,9 +1564,9 @@ function HrWorkSetManager({ workSets, currentSet, onSelectSetId, toggleWorkStage
             type="button"
             className="secondary-button compact danger-text"
             onClick={() => hrDeleteWorkSet(currentSet.id)}
-            title="Delete this Data Entry set"
+            title="Delete this Role Category"
           >
-            <Trash2 size={16} /> Delete Data Entry
+            <Trash2 size={16} /> Delete Role Category
           </button>
         )}
       </div>
@@ -1558,7 +1581,7 @@ function HrWorkSetManager({ workSets, currentSet, onSelectSetId, toggleWorkStage
           showToast={showToast}
         />
       ) : (
-        <div className="empty">No Data Entry available. Click "+ Create Data Entry" to create one.</div>
+        <div className="empty">No practical task category available. Click "+ Create Role / Category" to create one.</div>
       )}
 
       {/* Add Work Item Modal */}
@@ -1591,16 +1614,16 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
       <form className="process-modal" onSubmit={handleSubmit}>
         <div className="modal-head">
           <div>
-            <h2>Add New Work Item</h2>
-            <p>Add to Data Entry: <strong>{workSet.name}</strong> ({workSet.employeeName})</p>
+            <h2>Add New Practical Task</h2>
+            <p>Category: <strong>{workSet.name}</strong> ({workSet.employeeName})</p>
           </div>
           <button className="icon-button" type="button" onClick={onClose}>X</button>
         </div>
         <div className="modal-fields">
           <label>
-            Work Details / Title
+            Task Title / Name
             <div className="input-wrap">
-              <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Spinning Machine Card Entry" required />
+              <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Dispatch Vehicle Log / QC Sample Entry" required />
             </div>
           </label>
           <label>
@@ -1612,26 +1635,26 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
             </select>
           </label>
           <label>
-            Work Description & Instructions
+            Task Description & Instructions
             <div className="input-wrap">
-              <input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="e.g. Daily machine parameters & defect log verification" />
+              <input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="e.g. Daily vehicle logs & weighbridge slip verification" />
             </div>
           </label>
         </div>
         <div className="modal-actions">
           <button className="secondary-button" type="button" onClick={onClose}>Cancel</button>
-          <button className="primary-button" type="submit">Add Item</button>
+          <button className="primary-button" type="submit">Add Task</button>
         </div>
       </form>
     </div>
   );
 }
 
-// Modal: HR Create / Assign Work Set
+// Modal: HR Create / Assign Work Set for ANY Role
 function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
   const [name, setName] = useState('');
   const [employeeId, setEmployeeId] = useState(employees[0]?.id || '');
-  const [template, setTemplate] = useState('DEFAULT_20');
+  const [template, setTemplate] = useState('DEFAULT_DISPATCH');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -1645,16 +1668,16 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
       <form className="process-modal" onSubmit={handleSubmit}>
         <div className="modal-head">
           <div>
-            <h2>Create & Assign Data Entry</h2>
-            <p>Create a custom data entry practical training set for an employee.</p>
+            <h2>Create & Assign Role Practical Tasks</h2>
+            <p>Create a custom practical training set for any job role (Dispatch, HR, Production, Data Entry, QC).</p>
           </div>
           <button className="icon-button" type="button" onClick={onClose}>X</button>
         </div>
         <div className="modal-fields">
           <label>
-            Data Entry Title / Name
+            Role / Category Name
             <div className="input-wrap">
-              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Spinning Operations / Dyeing Quality / Accounts Data Entry" required />
+              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Dispatch & Logistics / HR & Admin / Production Operations / QC Lab" required />
             </div>
           </label>
           <label>
@@ -1668,17 +1691,29 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
             </select>
           </label>
 
-          {/* Pixel-Perfect Template Selection Cards */}
+          {/* Template Selection Cards */}
           <div className="template-selection-field">
-            <span className="field-label">Choose Data Entry Template:</span>
+            <span className="field-label">Choose Role Template:</span>
             <div className="template-cards-grid">
+              <div
+                className={`template-tile ${template === 'DEFAULT_DISPATCH' ? 'active' : ''}`}
+                onClick={() => setTemplate('DEFAULT_DISPATCH')}
+              >
+                <div className="tile-icon-head">
+                  <span className="tile-emoji">🚚</span>
+                  <strong>Dispatch & Logistics Tasks</strong>
+                  {template === 'DEFAULT_DISPATCH' && <Check size={16} className="tile-check" />}
+                </div>
+                <p>Pre-loaded with core Dispatch tasks (Vehicle logs, Weighbridge audit, Delivery challan, Gate register).</p>
+              </div>
+
               <div
                 className={`template-tile ${template === 'DEFAULT_20' ? 'active' : ''}`}
                 onClick={() => setTemplate('DEFAULT_20')}
               >
                 <div className="tile-icon-head">
                   <span className="tile-emoji">⚡</span>
-                  <strong>20 Standard Mill Items</strong>
+                  <strong>20 Standard Data Entry Tasks</strong>
                   {template === 'DEFAULT_20' && <Check size={16} className="tile-check" />}
                 </div>
                 <p>Pre-loaded with 20 standard mill entries (Compacting, Stenter, Lab, Petrol, QAD, etc.).</p>
@@ -1690,17 +1725,17 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
               >
                 <div className="tile-icon-head">
                   <span className="tile-emoji">📝</span>
-                  <strong>Blank Data Entry</strong>
+                  <strong>Blank Category (Add Tasks Manually)</strong>
                   {template === 'BLANK' && <Check size={16} className="tile-check" />}
                 </div>
-                <p>Start with a clean blank set and add your own custom work items manually.</p>
+                <p>Start with a clean blank set and add custom tasks manually for any role.</p>
               </div>
             </div>
           </div>
         </div>
         <div className="modal-actions">
           <button className="secondary-button" type="button" onClick={onClose}>Cancel</button>
-          <button className="primary-button" type="submit">Create Data Entry</button>
+          <button className="primary-button" type="submit">Create Role Category</button>
         </div>
       </form>
     </div>
@@ -1729,17 +1764,17 @@ function MdWorkSetOverview({ workSets }) {
       <section className="section-head executive">
         <div>
           <p className="eyebrow">Executive Leadership Overview</p>
-          <h2>Data Entry Analytics</h2>
-          <p>Mill-wide practical training execution stats across difficulty levels and employee work sets.</p>
+          <h2>Role Tasks & Practical Analytics</h2>
+          <p>Mill-wide practical training execution stats across Data Entry, Dispatch, HR, QC, and employee role categories.</p>
         </div>
         <ProgressRing value={overallPercent} label="Practical Readiness" />
       </section>
 
       <section className="metric-grid">
-        <Metric icon={Layers} label="Total Assigned Works" value={total} />
-        <Metric icon={CheckCircle2} label="Fully Completed Works" value={completed} />
-        <Metric icon={BriefcaseBusiness} label="Under Practical Entry" value={practical} />
-        <Metric icon={Award} label="Avg Practical Score" value="91/100" />
+        <Metric icon={Layers} label="Total Assigned Tasks" value={total} />
+        <Metric icon={CheckCircle2} label="Fully Completed Tasks" value={completed} />
+        <Metric icon={BriefcaseBusiness} label="Under Practical Training" value={practical} />
+        <Metric icon={Award} label="Avg Practical Score" value="93/100" />
       </section>
 
       <div className="md-chart-grid">
@@ -1758,7 +1793,7 @@ function MdWorkSetOverview({ workSets }) {
         <section className="md-chart-card">
           <div className="md-chart-head">
             <h3>Employee Practical Completion</h3>
-            <span className="badge">Assigned Work Sets</span>
+            <span className="badge">Role Categories</span>
           </div>
           <div className="md-bars">
             {workSets.map((set) => {
@@ -1777,9 +1812,9 @@ function MdWorkSetOverview({ workSets }) {
         </section>
       </div>
 
-      <Panel title="Assigned Work Sets Overview">
+      <Panel title="Assigned Role Categories Overview">
         <DataTable
-          columns={['Employee', 'Work Set Name', 'Assigned Date', 'Total', 'Completed', 'Progress', 'Status']}
+          columns={['Employee', 'Role Category', 'Assigned Date', 'Total Tasks', 'Completed', 'Progress', 'Status']}
           rows={workSets.map((set) => {
             const stats = getWorkSetStats(set.works);
             return [
@@ -1846,18 +1881,18 @@ function HrDashboard({ showToast, openModal, workSets }) {
       <section className="simple-welcome">
         <div>
           <h2>HR Dashboard</h2>
-          <p>Simple overview of employees, onboarding, practical data entry, and training.</p>
+          <p>Simple overview of employees, onboarding, role tasks (Data Entry, Dispatch, HR), and training.</p>
         </div>
       </section>
       <div className="simple-stats">
         <Metric icon={Users} label="Total Employees" value="124" />
-        <Metric icon={Layers} label="Data Entry Works" value={`${totalCompletedWorks}/${totalAssignedWorks}`} />
+        <Metric icon={Layers} label="Role Tasks Completed" value={`${totalCompletedWorks}/${totalAssignedWorks}`} />
         <Metric icon={BookOpen} label="Training Assigned" value="81" />
         <Metric icon={NotebookTabs} label="Pending Assessments" value="7" />
       </div>
       <div className="simple-two-column">
         <SimpleCard icon={History} title="Recent Employee Activity">
-          <SimpleList items={['Arun watched Compacting Card Entry screen recording video', 'Nisha completed Accounts Data Entry', 'Rahul onboarding in grace review']} />
+          <SimpleList items={['Arun watched Compacting Card Entry screen recording video', 'Priya completed Dispatch Vehicle Log audit', 'Nisha completed Accounts & HR tasks']} />
         </SimpleCard>
         <SimpleCard icon={BriefcaseBusiness} title="Quick Actions">
           <div className="quick-actions">
@@ -1917,12 +1952,12 @@ function MdDashboard({ approvalItems, workSets }) {
       <section className="simple-welcome">
         <div>
           <h2>MD Dashboard</h2>
-          <p>Management-focused LMS and Practical Training summary for Junior Processing Mill.</p>
+          <p>Management-focused LMS and Role Practical Training summary for Junior Processing Mill.</p>
         </div>
       </section>
       <div className="simple-stats">
         <Metric icon={Users} label="Total employees" value="124" />
-        <Metric icon={Layers} label="Data Entry Completion" value={`${completedRate}%`} />
+        <Metric icon={Layers} label="Role Tasks Completion" value={`${completedRate}%`} />
         <Metric icon={BookOpen} label="Training completion" value="76%" />
         <Metric icon={ShieldCheck} label="Pending approvals" value={pendingApprovals} />
       </div>
@@ -1934,7 +1969,7 @@ function MdDashboard({ approvalItems, workSets }) {
           </div>
           <div className="md-ring-row">
             <MdChartRing value={82} label="Onboarding" />
-            <MdChartRing value={completedRate} label="Data Entry" />
+            <MdChartRing value={completedRate} label="Role Tasks" />
             <MdChartRing value={76} label="Training" />
           </div>
         </section>
@@ -1948,15 +1983,15 @@ function MdDashboard({ approvalItems, workSets }) {
       </div>
       <div className="simple-three-column">
         <SimpleCard icon={Bell} title="Recent Important Updates">
-          <SimpleList items={['Data Entry (20 works) 60% completed', 'Monthly learning report is ready', '7 assessments currently open']} />
+          <SimpleList items={['Data Entry & Dispatch tasks 80% completed', 'Monthly learning report is ready', '7 assessments currently open']} />
         </SimpleCard>
         <SimpleCard icon={FileText} title="Quick Reports">
-          <SimpleList items={['Data Entry Practical Summary', 'Onboarding Summary', 'Assessment Status']} />
+          <SimpleList items={['Role Practical Tasks Summary', 'Onboarding Summary', 'Assessment Status']} />
         </SimpleCard>
         <SimpleCard icon={ShieldCheck} title="Pending Decisions">
           <div className="decision-list">
             <StatusLine text="Monthly learning report" status="Ready" />
-            <StatusLine text="Data Entry evaluations" status="Review" />
+            <StatusLine text="Practical Task evaluations" status="Review" />
             <StatusLine text="Training budget note" status="Pending" />
           </div>
         </SimpleCard>
@@ -2008,7 +2043,7 @@ function OnboardingMonitor() {
   );
 }
 
-// Unified TrainingView with Dynamic Sub-Nav Module Tabs
+// Unified TrainingView with Dynamic Sub-Nav Role Tabs
 function TrainingView({ role, session, showToast, trainingItems = trainings, setTrainingItems, openModal, workSets = [], toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, hrAddWorkItem, hrCreateWorkSet, hrDeleteWorkSet, initialSubTab = 'WORK_SET' }) {
   const isHr = role === 'HR' || role === 'hr';
   const isMd = role === 'MD' || role === 'md';
@@ -2025,22 +2060,39 @@ function TrainingView({ role, session, showToast, trainingItems = trainings, set
 
   return (
     <div className="stack">
-      {/* Sub Navigation Bar for Training */}
+      {/* Sub Navigation Bar with Role Tabs */}
       <div className="training-subnav-tabs">
-        <button
-          type="button"
-          className={`subnav-tab ${activeTab !== 'MATERIALS' ? 'active' : ''}`}
-          onClick={() => setActiveTab('WORK_SET')}
-        >
-          <Layers size={18} />
-          <span>Data Entry</span>
-        </button>
+        {displaySets.map((set) => (
+          <button
+            key={set.id}
+            type="button"
+            className={`subnav-tab ${activeTab === set.id || (activeTab === 'WORK_SET' && set.id === displaySets[0]?.id) ? 'active' : ''}`}
+            onClick={() => setActiveTab(set.id)}
+          >
+            {set.name.toLowerCase().includes('dispatch') ? <Truck size={17} /> : <Layers size={17} />}
+            <span>{set.name}</span>
+          </button>
+        ))}
+
+        {/* HR + Create Role / Category Tab Button */}
+        {isHr && (
+          <button
+            type="button"
+            className="subnav-tab create-tab"
+            onClick={() => setShowCreateSetModal(true)}
+            title="Create a new Role / Category task set"
+          >
+            <Plus size={16} />
+            <span>+ Create Role Category</span>
+          </button>
+        )}
+
         <button
           type="button"
           className={`subnav-tab ${activeTab === 'MATERIALS' ? 'active' : ''}`}
           onClick={() => setActiveTab('MATERIALS')}
         >
-          <BookOpen size={18} />
+          <BookOpen size={17} />
           <span>Videos & Course Materials</span>
         </button>
       </div>
@@ -2143,7 +2195,7 @@ function ProgressView({ company, workSet }) {
     <div className="stack">
       <section className="metric-grid">
         <Metric icon={LineChart} label={company ? 'Company overall' : 'My training progress'} value={company ? '76%' : '64%'} />
-        <Metric icon={Layers} label="Data Entry" value={`${stats.progressPercent}%`} />
+        <Metric icon={Layers} label="Role Tasks" value={`${stats.progressPercent}%`} />
         <Metric icon={Target} label="Target achievement" value={company ? '81%' : '74%'} />
         <Metric icon={NotebookTabs} label="Assessment score" value={company ? '84%' : '78%'} />
       </section>
@@ -2164,13 +2216,13 @@ function PerformanceView({ workSets }) {
       <Panel title="Assessment & Practical Performance">
         <DepartmentBars />
       </Panel>
-      <DataTable columns={['Department', 'Employees', 'Data Entry', 'Assessment', 'Risk']} rows={[['Production', '58', '60%', '81%', 'Medium'], ['Office', '24', '100%', '89%', 'Low'], ['Quality', '19', '75%', '76%', 'Medium'], ['Operations', '23', '80%', '85%', 'Low']]} />
+      <DataTable columns={['Department', 'Employees', 'Role Tasks', 'Assessment', 'Risk']} rows={[['Production', '58', '60%', '81%', 'Medium'], ['Office', '24', '100%', '89%', 'Low'], ['Dispatch', '12', '90%', '91%', 'Low'], ['Quality', '19', '75%', '76%', 'Medium']]} />
     </div>
   );
 }
 
 function ReportsView({ executive, generatedReports = [], setGeneratedReports, showToast }) {
-  const reportNames = ['Data Entry Practical Report', 'Onboarding Summary', 'Training Completion', executive ? 'Executive Decision Pack' : 'Employee Progress'];
+  const reportNames = ['Role Practical Tasks Report', 'Onboarding Summary', 'Training Completion', executive ? 'Executive Decision Pack' : 'Employee Progress'];
   const generateReport = (title) => {
     if (!generatedReports.includes(title)) {
       setGeneratedReports([...generatedReports, title]);
@@ -2369,6 +2421,7 @@ function MdBarChart() {
   const data = [
     ['Production', 72],
     ['Office', 88],
+    ['Dispatch', 90],
     ['Quality', 69],
     ['Operations', 78]
   ];
@@ -2554,6 +2607,7 @@ function DepartmentBars() {
   const data = [
     ['Production', 72],
     ['Office', 88],
+    ['Dispatch', 90],
     ['Quality', 69],
     ['Operations', 78]
   ];
