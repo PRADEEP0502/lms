@@ -494,7 +494,7 @@ function Portal({ session, onLogout, showToast }) {
 
     const newSet = {
       id,
-      name: newSetData.name || 'New Practical Work Module',
+      name: newSetData.name || 'Data Entry',
       employeeId: emp.id,
       employeeName: emp.name,
       department: emp.department,
@@ -503,19 +503,19 @@ function Portal({ session, onLogout, showToast }) {
     };
     const updated = [...workSets, newSet];
     updateWorkSets(updated);
-    showToast(`Work Module "${newSet.name}" created and assigned to ${emp.name}`);
+    showToast(`Data Entry "${newSet.name}" created and assigned to ${emp.name}`);
     return newSet.id;
   };
 
   const hrDeleteWorkSet = (workSetId) => {
     if (workSets.length <= 1) {
-      showToast('Cannot delete the last remaining Work Set.');
+      showToast('Cannot delete the last remaining Data Entry.');
       return;
     }
     const targetSet = workSets.find((s) => s.id === workSetId);
     const updated = workSets.filter((s) => s.id !== workSetId);
     updateWorkSets(updated);
-    showToast(`Work Module "${targetSet?.name || ''}" deleted`);
+    showToast(`Data Entry "${targetSet?.name || ''}" deleted`);
   };
 
   const onboardingPercent = Math.round((completed.length / onboardingSections.length) * 100);
@@ -1507,16 +1507,16 @@ function HrWorkSetManager({ workSets, currentSet, onSelectSetId, toggleWorkStage
     <div className="stack">
       <section className="section-head">
         <div>
-          <p className="eyebrow">HR WORK MODULE ADMINISTRATION</p>
-          <h2>Practical Training Work Sets & Modules</h2>
-          <p>Create unlimited work modules, add custom work items with screen recordings, set difficulty levels, and evaluate employee performance.</p>
+          <p className="eyebrow">HR DATA ENTRY ADMINISTRATION</p>
+          <h2>Data Entry</h2>
+          <p>Create data entry sets, add custom work items with screen recordings, set difficulty levels, and evaluate employee performance.</p>
         </div>
         <div className="top-actions">
           <button className="primary-button compact" onClick={onOpenCreateModal}>
-            <Plus size={17} /> + Create New Work Set / Module
+            <Plus size={17} /> + Create Data Entry
           </button>
           <button className="secondary-button compact" onClick={() => setShowAddWorkModal(true)}>
-            <Plus size={17} /> + Add Work Item to Module
+            <Plus size={17} /> + Add Work Item
           </button>
         </div>
       </section>
@@ -1524,7 +1524,7 @@ function HrWorkSetManager({ workSets, currentSet, onSelectSetId, toggleWorkStage
       {/* Select Employee Work Set & Actions */}
       <div className="workset-selector-bar">
         <label className="flex-1">
-          Select Employee Work Set / Module:
+          Select Employee Data Entry:
           <select value={currentSet?.id || ''} onChange={(e) => onSelectSetId(e.target.value)} className="workset-select">
             {workSets.map((set) => {
               const stats = getWorkSetStats(set.works);
@@ -1541,9 +1541,9 @@ function HrWorkSetManager({ workSets, currentSet, onSelectSetId, toggleWorkStage
             type="button"
             className="secondary-button compact danger-text"
             onClick={() => hrDeleteWorkSet(currentSet.id)}
-            title="Delete this Work Set / Module"
+            title="Delete this Data Entry set"
           >
-            <Trash2 size={16} /> Delete Module
+            <Trash2 size={16} /> Delete Data Entry
           </button>
         )}
       </div>
@@ -1558,7 +1558,7 @@ function HrWorkSetManager({ workSets, currentSet, onSelectSetId, toggleWorkStage
           showToast={showToast}
         />
       ) : (
-        <div className="empty">No Work Sets available. Click "+ Create New Work Set / Module" to create one.</div>
+        <div className="empty">No Data Entry available. Click "+ Create Data Entry" to create one.</div>
       )}
 
       {/* Add Work Item Modal */}
@@ -1591,8 +1591,8 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
       <form className="process-modal" onSubmit={handleSubmit}>
         <div className="modal-head">
           <div>
-            <h2>Add New Work Item to Module</h2>
-            <p>Add to Work Set: <strong>{workSet.name}</strong> ({workSet.employeeName})</p>
+            <h2>Add New Work Item</h2>
+            <p>Add to Data Entry: <strong>{workSet.name}</strong> ({workSet.employeeName})</p>
           </div>
           <button className="icon-button" type="button" onClick={onClose}>X</button>
         </div>
@@ -1645,14 +1645,14 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
       <form className="process-modal" onSubmit={handleSubmit}>
         <div className="modal-head">
           <div>
-            <h2>Create & Assign New Work Module</h2>
-            <p>Create a custom practical work training set for an employee.</p>
+            <h2>Create & Assign Data Entry</h2>
+            <p>Create a custom data entry practical training set for an employee.</p>
           </div>
           <button className="icon-button" type="button" onClick={onClose}>X</button>
         </div>
         <div className="modal-fields">
           <label>
-            Work Module / Set Name
+            Data Entry Title / Name
             <div className="input-wrap">
               <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Spinning Operations / Dyeing Quality / Accounts Data Entry" required />
             </div>
@@ -1670,7 +1670,7 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
 
           {/* Pixel-Perfect Template Selection Cards */}
           <div className="template-selection-field">
-            <span className="field-label">Choose Module Template:</span>
+            <span className="field-label">Choose Data Entry Template:</span>
             <div className="template-cards-grid">
               <div
                 className={`template-tile ${template === 'DEFAULT_20' ? 'active' : ''}`}
@@ -1690,17 +1690,17 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
               >
                 <div className="tile-icon-head">
                   <span className="tile-emoji">📝</span>
-                  <strong>Blank Custom Module</strong>
+                  <strong>Blank Data Entry</strong>
                   {template === 'BLANK' && <Check size={16} className="tile-check" />}
                 </div>
-                <p>Start with a clean blank module and add your own custom work items manually.</p>
+                <p>Start with a clean blank set and add your own custom work items manually.</p>
               </div>
             </div>
           </div>
         </div>
         <div className="modal-actions">
           <button className="secondary-button" type="button" onClick={onClose}>Cancel</button>
-          <button className="primary-button" type="submit">Create Work Module</button>
+          <button className="primary-button" type="submit">Create Data Entry</button>
         </div>
       </form>
     </div>
@@ -2039,16 +2039,16 @@ function TrainingView({ role, session, showToast, trainingItems = trainings, set
           </button>
         ))}
 
-        {/* HR + Add Work Module Tab button right in top tab bar */}
+        {/* HR + Add Data Entry Tab button right in top tab bar */}
         {isHr && (
           <button
             type="button"
             className="subnav-tab create-tab"
             onClick={() => setShowCreateSetModal(true)}
-            title="Create a new practical work module"
+            title="Create a new Data Entry set"
           >
             <Plus size={16} />
-            <span>+ Create Work Module</span>
+            <span>+ Create Data Entry</span>
           </button>
         )}
 
