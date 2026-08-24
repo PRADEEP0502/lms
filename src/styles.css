@@ -2335,6 +2335,23 @@ tr:last-child td {
   color: #ffffff;
 }
 
+.video-btn.hr-btn {
+  background: rgba(142, 68, 173, 0.1);
+  color: #8e44ad;
+  border-color: rgba(142, 68, 173, 0.25);
+}
+
+.video-btn.hr-btn:hover {
+  background: #8e44ad;
+  color: #ffffff;
+}
+
+.flex-stack-sm {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .mobile-video-btn {
   display: flex;
   align-items: center;

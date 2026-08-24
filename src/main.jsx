@@ -971,11 +971,12 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
                       <strong className="work-title">{item.title}</strong>
                       <button
                         type="button"
-                        className="video-btn"
+                        className={`video-btn ${role === 'HR' ? 'hr-btn' : ''}`}
                         onClick={() => setSelectedVideoWork(item)}
-                        title="Watch practical demo video for this task"
+                        title={role === 'HR' ? 'Add or Edit video link for employees' : 'Watch practical demo video for this task'}
                       >
-                        <Play size={12} /> Watch Video
+                        {role === 'HR' ? <Video size={13} /> : <Play size={12} />}
+                        {role === 'HR' ? 'Add/Edit Video' : 'Watch Video'}
                       </button>
                     </div>
                     <p className="work-desc">{item.description}</p>
@@ -1033,12 +1034,20 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
                   </td>
                   {role === 'HR' && (
                     <td>
-                      <button
-                        className="secondary-button compact text-xs"
-                        onClick={() => setSelectedWorkForHr({ workSetId: workSet.id, item })}
-                      >
-                        <Edit3 size={14} /> Evaluate
-                      </button>
+                      <div className="flex-stack-sm">
+                        <button
+                          className="secondary-button compact text-xs"
+                          onClick={() => setSelectedWorkForHr({ workSetId: workSet.id, item })}
+                        >
+                          <Edit3 size={13} /> Evaluate
+                        </button>
+                        <button
+                          className="link-button compact text-xs"
+                          onClick={() => setSelectedVideoWork(item)}
+                        >
+                          <Video size={13} /> Edit Video
+                        </button>
+                      </div>
                     </td>
                   )}
                 </tr>
@@ -1063,13 +1072,14 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
               <h3 className="mobile-work-title">{item.title}</h3>
               <p className="mobile-work-desc">{item.description}</p>
 
-              {/* Mobile Watch Video Button */}
+              {/* Mobile Video Action Button */}
               <button
                 type="button"
                 className="mobile-video-btn"
                 onClick={() => setSelectedVideoWork(item)}
               >
-                <Play size={14} /> Watch Training Video Demo
+                {role === 'HR' ? <Video size={14} /> : <Play size={14} />}
+                {role === 'HR' ? 'Add / Edit Training Video' : 'Watch Training Video Demo'}
               </button>
 
               {/* Mobile Stage Checkboxes */}
