@@ -1705,7 +1705,7 @@ tr:last-child td {
   padding: 0;
   margin: 0;
   display: grid;
-  gap: 10px;
+  gap: 12px;
   font-size: 0.88rem;
 }
 
@@ -1713,36 +1713,56 @@ tr:last-child td {
 .help-level-list li {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: var(--secondary);
+  line-height: 1.4;
 }
 
 .chip-stage {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 0.76rem;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.78rem;
   font-weight: 700;
-  min-width: 90px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  min-width: max-content;
   text-align: center;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
-.chip-stage.a { background: #e0f2fe; color: #0369a1; }
-.chip-stage.b { background: #fef3c7; color: #b45309; }
-.chip-stage.c { background: #dcfce7; color: #15803d; }
+.chip-stage.a {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid rgba(3, 105, 161, 0.2);
+}
+
+.chip-stage.b {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid rgba(180, 83, 9, 0.2);
+}
+
+.chip-stage.c {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid rgba(21, 128, 61, 0.2);
+}
 
 /* Level Badges */
 .badge-level {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: 999px;
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.2px;
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .badge-level.l1 {
@@ -1911,6 +1931,36 @@ tr:last-child td {
   background: var(--primary);
   border-color: var(--primary);
   color: #ffffff;
+}
+
+.checkbox-wrap.readonly {
+  cursor: default;
+}
+
+.checkbox-wrap.readonly:hover .custom-checkbox {
+  border-color: #c7c7cc;
+}
+
+.custom-checkbox.readonly {
+  cursor: default;
+  background: #f2f2f7;
+  border-color: #d1d1d6;
+}
+
+.checkbox-wrap input[type="checkbox"]:checked + .custom-checkbox.readonly {
+  background: #34c759;
+  border-color: #34c759;
+  color: #ffffff;
+}
+
+.mobile-stage-btn.readonly {
+  cursor: default;
+}
+
+.mobile-stage-btn.readonly.checked {
+  background: #eaf8ee;
+  border-color: rgba(52, 199, 89, 0.4);
+  color: #248a3d;
 }
 
 /* Performance Box */
@@ -2216,4 +2266,44 @@ tr:last-child td {
     font-weight: 600;
   }
 }
+
+/* Sub Navigation Tabs for Training */
+.training-subnav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 6px;
+  box-shadow: var(--shadow);
+  margin-bottom: 4px;
+}
+
+.subnav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-small);
+  border: 0;
+  background: transparent;
+  color: var(--secondary);
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.subnav-tab.active {
+  background: rgba(0, 122, 255, 0.1);
+  color: var(--primary);
+  box-shadow: inset 0 0 0 1px rgba(0, 122, 255, 0.2);
+}
+
+.subnav-tab:hover:not(.active) {
+  background: #f5f5f7;
+  color: var(--text);
+}
+
 

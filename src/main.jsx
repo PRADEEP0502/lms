@@ -98,7 +98,7 @@ const trainings = [
 const notifications = [
   'Onboarding policy acknowledgement pending.',
   'Production Safety Essentials assigned for this month.',
-  'Data Entry Work Set (20 works) assigned for practical training.',
+  'Data Entry (20 works) assigned inside My Training.',
   'Assessment window closes on Sep 05.'
 ];
 
@@ -172,7 +172,7 @@ const onboardingSections = [
   }
 ];
 
-// Initial 20 Work Items for Data Entry Work Set
+// Initial 20 Work Items for Data Entry
 const defaultWorkItems = [
   { id: 'W-01', title: 'Compacting Card Entry', level: 'L1', description: 'Hard Work — Compacting department daily card entries & log verification', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 92, performanceStatus: 'Excellent', hrRemarks: 'Accurate entry and timely log submission.', hrApproved: true },
   { id: 'W-02', title: 'Stenter Job Card Entry', level: 'L1', description: 'Hard Work — Stenter machine job card parameters logging', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 88, performanceStatus: 'Good', hrRemarks: 'Verified against machine output logs.', hrApproved: true },
@@ -199,7 +199,7 @@ const defaultWorkItems = [
 const initialWorkSets = [
   {
     id: 'WS-101',
-    name: 'Data Entry Work Set',
+    name: 'Data Entry',
     employeeId: 'EMP-1042',
     employeeName: 'Arun Prakash',
     department: 'Production',
@@ -381,7 +381,7 @@ function Portal({ session, onLogout, showToast }) {
   const [generatedReports, setGeneratedReports] = useState([]);
   const [approvalItems, setApprovalItems] = useState([
     { id: 'report', text: 'Approve monthly learning report', status: 'Ready' },
-    { id: 'workset', text: 'Approve Data Entry Work Set evaluation grades', status: 'Review' },
+    { id: 'workset', text: 'Approve Data Entry evaluation grades', status: 'Review' },
     { id: 'grace', text: 'Review 4 grace-period cases', status: 'Review' },
     { id: 'budget', text: 'Approve training budget recommendation', status: 'Pending' }
   ]);
@@ -457,7 +457,7 @@ function Portal({ session, onLogout, showToast }) {
       return { ...set, works: [...set.works, itemToAdd] };
     });
     updateWorkSets(updated);
-    showToast('New work item added to Work Set');
+    showToast('New work item added to Data Entry');
   };
 
   const hrCreateWorkSet = (newSetData) => {
@@ -465,7 +465,7 @@ function Portal({ session, onLogout, showToast }) {
     const emp = employees.find((e) => e.id === newSetData.employeeId) || employees[0];
     const newSet = {
       id,
-      name: newSetData.name || 'Data Entry Work Set',
+      name: newSetData.name || 'Data Entry',
       employeeId: emp.id,
       employeeName: emp.name,
       department: emp.department,
@@ -474,7 +474,7 @@ function Portal({ session, onLogout, showToast }) {
     };
     const updated = [...workSets, newSet];
     updateWorkSets(updated);
-    showToast(`Work Set assigned to ${emp.name}`);
+    showToast(`Data Entry assigned to ${emp.name}`);
   };
 
   const onboardingPercent = Math.round((completed.length / onboardingSections.length) * 100);
@@ -593,7 +593,6 @@ function getNavigation(role, onboardingPercent) {
       { label: 'Dashboard', icon: LayoutDashboard },
       { label: 'Onboarding', icon: ClipboardCheck },
       { label: 'My Training', icon: BookOpen, locked: lmsLocked },
-      { label: 'Data Entry Work Set', icon: Layers, locked: lmsLocked },
       { label: 'Assessments', icon: NotebookTabs, locked: lmsLocked },
       { label: 'Progress', icon: LineChart, locked: lmsLocked },
       { label: 'History', icon: History, locked: lmsLocked },
@@ -605,9 +604,8 @@ function getNavigation(role, onboardingPercent) {
     return [
       { label: 'Dashboard', icon: LayoutDashboard },
       { label: 'Employees', icon: Users },
-      { label: 'Data Entry Work Sets', icon: Layers },
-      { label: 'Onboarding', icon: ClipboardCheck },
       { label: 'Training', icon: BookOpen },
+      { label: 'Onboarding', icon: ClipboardCheck },
       { label: 'Assessments', icon: NotebookTabs },
       { label: 'Progress', icon: LineChart },
       { label: 'Reports', icon: FileText },
@@ -618,7 +616,6 @@ function getNavigation(role, onboardingPercent) {
   return [
     { label: 'Dashboard', icon: LayoutDashboard },
     { label: 'Employees', icon: Users },
-    { label: 'Data Entry Analytics', icon: Layers },
     { label: 'Training Overview', icon: BookOpen },
     { label: 'Performance', icon: BarChart3 },
     { label: 'Reports', icon: FileText },
@@ -636,13 +633,23 @@ function Content(props) {
 }
 
 function EmployeeContent(props) {
-  const { active, session, completed, onboardingPercent, markSection, completeAll, showToast, trainingItems, setTrainingItems, workSets, toggleWorkStage, setActive } = props;
+  const { active, session, completed, onboardingPercent, markSection, completeAll, showToast, trainingItems, setTrainingItems, workSets, toggleWorkStage, setActive, openModal } = props;
 
   if (active === 'Onboarding') return <Onboarding completed={completed} markSection={markSection} completeAll={completeAll} percent={onboardingPercent} />;
-  if (active === 'My Training') return <TrainingView role="employee" showToast={showToast} trainingItems={trainingItems} setTrainingItems={setTrainingItems} workSets={workSets} setActive={setActive} />;
-  if (active === 'Data Entry Work Set') {
-    const userSet = workSets.find((s) => s.employeeId === session.employeeId) || workSets[0];
-    return <DataEntryWorkSetView workSet={userSet} role={session.role} toggleWorkStage={toggleWorkStage} showToast={showToast} />;
+  if (active === 'My Training' || active === 'Data Entry Work Set' || active === 'Data Entry') {
+    return (
+      <TrainingView
+        role={session.role}
+        session={session}
+        showToast={showToast}
+        trainingItems={trainingItems}
+        setTrainingItems={setTrainingItems}
+        workSets={workSets}
+        toggleWorkStage={toggleWorkStage}
+        openModal={openModal}
+        initialSubTab="WORK_SET"
+      />
+    );
   }
   if (active === 'Assessments') return <AssessmentsView showToast={showToast} />;
   if (active === 'Progress') return <ProgressView workSet={workSets.find((s) => s.employeeId === session.employeeId) || workSets[0]} />;
@@ -675,7 +682,7 @@ function EmployeeDashboard({ session, onboardingPercent, trainingItems, workSet,
             {completedSections} of {onboardingSections.length} sections completed
           </p>
         </SimpleCard>
-        <SimpleCard icon={Layers} title="Data Entry Work Set">
+        <SimpleCard icon={Layers} title="Data Entry">
           <div className="workset-mini-summary">
             <div className="workset-mini-val">
               <strong>{stats.completed} / {stats.total}</strong>
@@ -684,8 +691,8 @@ function EmployeeDashboard({ session, onboardingPercent, trainingItems, workSet,
             <div className="bar" style={{ margin: '10px 0' }}>
               <span style={{ width: `${stats.progressPercent}%` }} />
             </div>
-            <button className="link-button" type="button" onClick={() => setActive('Data Entry Work Set')}>
-              View Data Entry Work Set →
+            <button className="link-button" type="button" onClick={() => setActive('My Training')}>
+              Open Data Entry in My Training →
             </button>
           </div>
         </SimpleCard>
@@ -763,7 +770,7 @@ function Onboarding({ completed, markSection, completeAll, percent }) {
   );
 }
 
-// Data Entry Work Set Main View Component
+// Data Entry Main View Component
 function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerformance, showToast }) {
   const [search, setSearch] = useState('');
   const [levelFilter, setLevelFilter] = useState('ALL');
@@ -771,7 +778,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
   const [showHelp, setShowHelp] = useState(true);
   const [selectedWorkForHr, setSelectedWorkForHr] = useState(null);
 
-  if (!workSet) return <div className="empty">No Work Set assigned.</div>;
+  if (!workSet) return <div className="empty">No Data Entry assigned.</div>;
 
   const stats = getWorkSetStats(workSet.works);
 
@@ -945,33 +952,36 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
                     <span className={`badge-level ${item.level.toLowerCase()}`}>{item.level}</span>
                   </td>
                   <td className="stage-check-cell">
-                    <label className="checkbox-wrap">
+                    <label className={`checkbox-wrap ${role !== 'HR' ? 'readonly' : ''}`} title={role !== 'HR' ? 'Stage marked by HR' : 'Toggle Stage A'}>
                       <input
                         type="checkbox"
                         checked={item.stageA}
-                        onChange={() => toggleWorkStage(workSet.id, item.id, 'stageA')}
+                        disabled={role !== 'HR'}
+                        onChange={() => role === 'HR' && toggleWorkStage(workSet.id, item.id, 'stageA')}
                       />
-                      <span className="custom-checkbox"><Check size={14} /></span>
+                      <span className={`custom-checkbox ${role !== 'HR' ? 'readonly' : ''}`}><Check size={14} /></span>
                     </label>
                   </td>
                   <td className="stage-check-cell">
-                    <label className="checkbox-wrap">
+                    <label className={`checkbox-wrap ${role !== 'HR' ? 'readonly' : ''}`} title={role !== 'HR' ? 'Stage marked by HR' : 'Toggle Stage B'}>
                       <input
                         type="checkbox"
                         checked={item.stageB}
-                        onChange={() => toggleWorkStage(workSet.id, item.id, 'stageB')}
+                        disabled={role !== 'HR'}
+                        onChange={() => role === 'HR' && toggleWorkStage(workSet.id, item.id, 'stageB')}
                       />
-                      <span className="custom-checkbox"><Check size={14} /></span>
+                      <span className={`custom-checkbox ${role !== 'HR' ? 'readonly' : ''}`}><Check size={14} /></span>
                     </label>
                   </td>
                   <td className="stage-check-cell">
-                    <label className="checkbox-wrap">
+                    <label className={`checkbox-wrap ${role !== 'HR' ? 'readonly' : ''}`} title={role !== 'HR' ? 'Stage marked by HR' : 'Toggle Stage C'}>
                       <input
                         type="checkbox"
                         checked={item.stageC}
-                        onChange={() => toggleWorkStage(workSet.id, item.id, 'stageC')}
+                        disabled={role !== 'HR'}
+                        onChange={() => role === 'HR' && toggleWorkStage(workSet.id, item.id, 'stageC')}
                       />
-                      <span className="custom-checkbox"><Check size={14} /></span>
+                      <span className={`custom-checkbox ${role !== 'HR' ? 'readonly' : ''}`}><Check size={14} /></span>
                     </label>
                   </td>
                   <td className="performance-cell">
@@ -1023,27 +1033,30 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
 
               {/* Mobile Stage Checkboxes */}
               <div className="mobile-stages-row">
-                <label className={`mobile-stage-btn ${item.stageA ? 'checked' : ''}`}>
+                <label className={`mobile-stage-btn ${item.stageA ? 'checked' : ''} ${role !== 'HR' ? 'readonly' : ''}`}>
                   <input
                     type="checkbox"
                     checked={item.stageA}
-                    onChange={() => toggleWorkStage(workSet.id, item.id, 'stageA')}
+                    disabled={role !== 'HR'}
+                    onChange={() => role === 'HR' && toggleWorkStage(workSet.id, item.id, 'stageA')}
                   />
                   <span>A (Learned)</span>
                 </label>
-                <label className={`mobile-stage-btn ${item.stageB ? 'checked' : ''}`}>
+                <label className={`mobile-stage-btn ${item.stageB ? 'checked' : ''} ${role !== 'HR' ? 'readonly' : ''}`}>
                   <input
                     type="checkbox"
                     checked={item.stageB}
-                    onChange={() => toggleWorkStage(workSet.id, item.id, 'stageB')}
+                    disabled={role !== 'HR'}
+                    onChange={() => role === 'HR' && toggleWorkStage(workSet.id, item.id, 'stageB')}
                   />
                   <span>B (Practical)</span>
                 </label>
-                <label className={`mobile-stage-btn ${item.stageC ? 'checked' : ''}`}>
+                <label className={`mobile-stage-btn ${item.stageC ? 'checked' : ''} ${role !== 'HR' ? 'readonly' : ''}`}>
                   <input
                     type="checkbox"
                     checked={item.stageC}
-                    onChange={() => toggleWorkStage(workSet.id, item.id, 'stageC')}
+                    disabled={role !== 'HR'}
+                    onChange={() => role === 'HR' && toggleWorkStage(workSet.id, item.id, 'stageC')}
                   />
                   <span>C (4 Days)</span>
                 </label>
@@ -1157,8 +1170,8 @@ function HrWorkSetManager({ workSets, toggleWorkStage, hrUpdatePerformance, hrAd
     <div className="stack">
       <section className="section-head">
         <div>
-          <p className="eyebrow">HR Training Administration</p>
-          <h2>Data Entry Work Sets Manager</h2>
+          <p className="eyebrow">HR TRAINING ADMINISTRATION</p>
+          <h2>Data Entry</h2>
           <p>Create work sets, assign 20+ data entry items, set difficulty levels, and verify practical performance.</p>
         </div>
         <div className="top-actions">
@@ -1240,7 +1253,7 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
         <div className="modal-head">
           <div>
             <h2>Add New Work Item</h2>
-            <p>Add to Work Set: <strong>{workSet.name}</strong> ({workSet.employeeName})</p>
+            <p>Add to Data Entry: <strong>{workSet.name}</strong> ({workSet.employeeName})</p>
           </div>
           <button className="icon-button" type="button" onClick={onClose}>X</button>
         </div>
@@ -1277,7 +1290,7 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
 
 // Modal: HR Create / Assign Work Set
 function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
-  const [name, setName] = useState('Data Entry Work Set');
+  const [name, setName] = useState('Data Entry');
   const [employeeId, setEmployeeId] = useState(employees[0]?.id || '');
 
   const handleSubmit = (e) => {
@@ -1291,8 +1304,8 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
       <form className="process-modal" onSubmit={handleSubmit}>
         <div className="modal-head">
           <div>
-            <h2>Assign New Work Set</h2>
-            <p>Assign default 20-item Data Entry Work Set to an employee.</p>
+            <h2>Assign New Data Entry Work Set</h2>
+            <p>Assign default 20-item Data Entry set to an employee.</p>
           </div>
           <button className="icon-button" type="button" onClick={onClose}>X</button>
         </div>
@@ -1329,8 +1342,6 @@ function MdWorkSetOverview({ workSets }) {
   const total = allWorks.length;
   const completed = allWorks.filter((w) => w.status === 'Completed').length;
   const practical = allWorks.filter((w) => w.status === 'Practical').length;
-  const learned = allWorks.filter((w) => w.status === 'Learned').length;
-  const notStarted = allWorks.filter((w) => w.status === 'Not Started').length;
 
   const l1Works = allWorks.filter((w) => w.level === 'L1');
   const l2Works = allWorks.filter((w) => w.level === 'L2');
@@ -1347,7 +1358,7 @@ function MdWorkSetOverview({ workSets }) {
       <section className="section-head executive">
         <div>
           <p className="eyebrow">Executive Leadership Overview</p>
-          <h2>Practical Data Entry Work Set Analytics</h2>
+          <h2>Data Entry Analytics</h2>
           <p>Mill-wide practical training execution stats across difficulty levels and employee work sets.</p>
         </div>
         <ProgressRing value={overallPercent} label="Practical Readiness" />
@@ -1420,20 +1431,25 @@ function HrContent(props) {
   const { active, session, showToast, trainingItems, setTrainingItems, generatedReports, setGeneratedReports, openModal, workSets, toggleWorkStage, hrUpdatePerformance, hrAddWorkItem, hrCreateWorkSet } = props;
 
   if (active === 'Employees') return <EmployeesView showToast={showToast} openModal={openModal} />;
-  if (active === 'Data Entry Work Sets') {
+  if (active === 'Training' || active === 'Data Entry') {
     return (
-      <HrWorkSetManager
+      <TrainingView
+        role="HR"
+        session={session}
+        showToast={showToast}
+        trainingItems={trainingItems}
+        setTrainingItems={setTrainingItems}
+        openModal={openModal}
         workSets={workSets}
         toggleWorkStage={toggleWorkStage}
         hrUpdatePerformance={hrUpdatePerformance}
         hrAddWorkItem={hrAddWorkItem}
         hrCreateWorkSet={hrCreateWorkSet}
-        showToast={showToast}
+        initialSubTab="WORK_SET"
       />
     );
   }
   if (active === 'Onboarding') return <OnboardingMonitor />;
-  if (active === 'Training') return <TrainingView role="hr" showToast={showToast} trainingItems={trainingItems} setTrainingItems={setTrainingItems} openModal={openModal} workSets={workSets} />;
   if (active === 'Assessments') return <AssessmentsView canManage showToast={showToast} openModal={openModal} />;
   if (active === 'Progress') return <ProgressView company workSet={workSets[0]} />;
   if (active === 'Reports') return <ReportsView generatedReports={generatedReports} setGeneratedReports={setGeneratedReports} showToast={showToast} />;
@@ -1457,7 +1473,7 @@ function HrDashboard({ showToast, openModal, workSets }) {
       <section className="simple-welcome">
         <div>
           <h2>HR Dashboard</h2>
-          <p>Simple overview of employees, onboarding, practical data entry work sets, and training.</p>
+          <p>Simple overview of employees, onboarding, practical data entry, and training.</p>
         </div>
       </section>
       <div className="simple-stats">
@@ -1468,7 +1484,7 @@ function HrDashboard({ showToast, openModal, workSets }) {
       </div>
       <div className="simple-two-column">
         <SimpleCard icon={History} title="Recent Employee Activity">
-          <SimpleList items={['Arun updated Compacting Card Entry stage to Practical', 'Nisha completed Accounts Data Entry Work Set', 'Rahul onboarding in grace review']} />
+          <SimpleList items={['Arun updated Compacting Card Entry stage to Practical', 'Nisha completed Accounts Data Entry', 'Rahul onboarding in grace review']} />
         </SimpleCard>
         <SimpleCard icon={BriefcaseBusiness} title="Quick Actions">
           <div className="quick-actions">
@@ -1491,11 +1507,24 @@ function HrDashboard({ showToast, openModal, workSets }) {
 }
 
 function MdContent(props) {
-  const { active, session, showToast, generatedReports, setGeneratedReports, approvalItems, setApprovalItems, workSets } = props;
+  const { active, session, showToast, generatedReports, setGeneratedReports, approvalItems, setApprovalItems, workSets, toggleWorkStage, openModal, trainingItems, setTrainingItems } = props;
 
   if (active === 'Employees') return <EmployeesView readOnly />;
-  if (active === 'Data Entry Analytics') return <MdWorkSetOverview workSets={workSets} />;
-  if (active === 'Training Overview') return <TrainingOverview workSets={workSets} />;
+  if (active === 'Training Overview' || active === 'Data Entry Analytics' || active === 'Data Entry') {
+    return (
+      <TrainingView
+        role="MD"
+        session={session}
+        showToast={showToast}
+        trainingItems={trainingItems}
+        setTrainingItems={setTrainingItems}
+        openModal={openModal}
+        workSets={workSets}
+        toggleWorkStage={toggleWorkStage}
+        initialSubTab="WORK_SET"
+      />
+    );
+  }
   if (active === 'Performance') return <PerformanceView workSets={workSets} />;
   if (active === 'Reports') return <ReportsView executive generatedReports={generatedReports} setGeneratedReports={setGeneratedReports} showToast={showToast} />;
   if (active === 'Approvals') return <ApprovalsView approvalItems={approvalItems} setApprovalItems={setApprovalItems} showToast={showToast} />;
@@ -1545,15 +1574,15 @@ function MdDashboard({ approvalItems, workSets }) {
       </div>
       <div className="simple-three-column">
         <SimpleCard icon={Bell} title="Recent Important Updates">
-          <SimpleList items={['Data Entry Work Set (20 works) 60% completed', 'Monthly learning report is ready', '7 assessments currently open']} />
+          <SimpleList items={['Data Entry (20 works) 60% completed', 'Monthly learning report is ready', '7 assessments currently open']} />
         </SimpleCard>
         <SimpleCard icon={FileText} title="Quick Reports">
-          <SimpleList items={['Data Entry Training Summary', 'Onboarding Summary', 'Assessment Status']} />
+          <SimpleList items={['Data Entry Practical Summary', 'Onboarding Summary', 'Assessment Status']} />
         </SimpleCard>
         <SimpleCard icon={ShieldCheck} title="Pending Decisions">
           <div className="decision-list">
             <StatusLine text="Monthly learning report" status="Ready" />
-            <StatusLine text="Data Entry Work Set evaluations" status="Review" />
+            <StatusLine text="Data Entry evaluations" status="Review" />
             <StatusLine text="Training budget note" status="Pending" />
           </div>
         </SimpleCard>
@@ -1605,45 +1634,81 @@ function OnboardingMonitor() {
   );
 }
 
-function TrainingView({ role, showToast, trainingItems = trainings, setTrainingItems, openModal, workSets, setActive }) {
-  const isHr = role === 'hr';
+// Unified TrainingView with Sub-Tabs
+function TrainingView({ role, session, showToast, trainingItems = trainings, setTrainingItems, openModal, workSets, toggleWorkStage, hrUpdatePerformance, hrAddWorkItem, hrCreateWorkSet, initialSubTab = 'WORK_SET' }) {
+  const [activeTab, setActiveTab] = useState(initialSubTab);
+  const isHr = role === 'HR' || role === 'hr';
+  const isMd = role === 'MD' || role === 'md';
+  const isEmp = role === 'EMPLOYEE' || role === 'employee';
   const uploadFields = ['Material title', 'Type: video / document / assessment', 'Department', 'Due date'];
+
+  const userSet = workSets ? (workSets.find((s) => s.employeeId === session?.employeeId) || workSets[0]) : null;
 
   return (
     <div className="stack">
-      <section className="section-head">
-        <div>
-          <p className="eyebrow">{isHr ? 'Training administration' : 'Assigned learning'}</p>
-          <h2>{isHr ? 'Training videos and materials' : 'My Training'}</h2>
-          <p>{isHr ? 'Upload learning materials, schedule training, and assign employees.' : 'Only training assigned to you is shown here.'}</p>
-        </div>
-        {isHr && (
-          <button className="primary-button compact" onClick={() => openModal('Upload Material', 'Add training video or material and assign it to employees.', uploadFields)}>
-            <Upload size={17} />
-            Upload material
-          </button>
-        )}
-      </section>
+      {/* Sub Navigation Bar for Training */}
+      <div className="training-subnav-tabs">
+        <button
+          type="button"
+          className={`subnav-tab ${activeTab === 'WORK_SET' ? 'active' : ''}`}
+          onClick={() => setActiveTab('WORK_SET')}
+        >
+          <Layers size={18} />
+          <span>Data Entry</span>
+        </button>
+        <button
+          type="button"
+          className={`subnav-tab ${activeTab === 'MATERIALS' ? 'active' : ''}`}
+          onClick={() => setActiveTab('MATERIALS')}
+        >
+          <BookOpen size={18} />
+          <span>Videos & Course Materials</span>
+        </button>
+      </div>
 
-      {/* Practical Data Entry Work Set Highlight Card */}
-      {workSets && workSets[0] && (
-        <div className="training-workset-promo-card">
-          <div className="promo-icon"><Layers size={26} /></div>
-          <div className="promo-text">
-            <h3>Practical Data Entry Work Set (20 Works)</h3>
-            <p>Compacting, Stenter, Lab Cards, Petrol Statement, Dryer, QAD & Transport Entries practical training set.</p>
-          </div>
-          <button className="primary-button compact" onClick={() => setActive && setActive(isHr ? 'Data Entry Work Sets' : 'Data Entry Work Set')}>
-            Open Work Set →
-          </button>
+      {activeTab === 'WORK_SET' ? (
+        isEmp ? (
+          <DataEntryWorkSetView
+            workSet={userSet}
+            role="EMPLOYEE"
+            toggleWorkStage={toggleWorkStage}
+            showToast={showToast}
+          />
+        ) : isHr ? (
+          <HrWorkSetManager
+            workSets={workSets}
+            toggleWorkStage={toggleWorkStage}
+            hrUpdatePerformance={hrUpdatePerformance}
+            hrAddWorkItem={hrAddWorkItem}
+            hrCreateWorkSet={hrCreateWorkSet}
+            showToast={showToast}
+          />
+        ) : (
+          <MdWorkSetOverview workSets={workSets} />
+        )
+      ) : (
+        <div className="stack">
+          <section className="section-head">
+            <div>
+              <p className="eyebrow">{isHr ? 'Training administration' : 'Assigned learning'}</p>
+              <h2>{isHr ? 'Training videos and materials' : 'Videos & Course Materials'}</h2>
+              <p>{isHr ? 'Upload learning materials, schedule training, and assign employees.' : 'General learning videos and reference materials assigned to you.'}</p>
+            </div>
+            {isHr && (
+              <button className="primary-button compact" onClick={() => openModal('Upload Material', 'Add training video or material and assign it to employees.', uploadFields)}>
+                <Upload size={17} />
+                Upload material
+              </button>
+            )}
+          </section>
+
+          <section className="training-grid">
+            {trainingItems.map((item) => (
+              <TrainingCard key={item.title} item={item} isHr={isHr} showToast={showToast} setTrainingItems={setTrainingItems} openModal={openModal} />
+            ))}
+          </section>
         </div>
       )}
-
-      <section className="training-grid">
-        {trainingItems.map((item) => (
-          <TrainingCard key={item.title} item={item} isHr={isHr} showToast={showToast} setTrainingItems={setTrainingItems} openModal={openModal} />
-        ))}
-      </section>
     </div>
   );
 }
@@ -1681,7 +1746,7 @@ function ProgressView({ company, workSet }) {
     <div className="stack">
       <section className="metric-grid">
         <Metric icon={LineChart} label={company ? 'Company overall' : 'My training progress'} value={company ? '76%' : '64%'} />
-        <Metric icon={Layers} label="Data Entry Work Set" value={`${stats.progressPercent}%`} />
+        <Metric icon={Layers} label="Data Entry" value={`${stats.progressPercent}%`} />
         <Metric icon={Target} label="Target achievement" value={company ? '81%' : '74%'} />
         <Metric icon={NotebookTabs} label="Assessment score" value={company ? '84%' : '78%'} />
       </section>
@@ -1696,21 +1761,6 @@ function HistoryView() {
   return <DataTable columns={['Training', 'Completed on', 'Score', 'Status']} rows={[['Junior Processing Mill Induction', 'Aug 12', '92%', 'Completed'], ['Policy Basics', 'Aug 14', '88%', 'Completed'], ['Safety Orientation', 'Aug 18', 'In progress', 'Open']]} />;
 }
 
-function TrainingOverview({ workSets }) {
-  const totalWorks = workSets ? workSets.flatMap((s) => s.works).length : 20;
-  return (
-    <div className="stack">
-      <section className="metric-grid">
-        <Metric icon={BookOpen} label="Assigned modules" value="21" />
-        <Metric icon={Layers} label="Data Entry Works" value={totalWorks} />
-        <Metric icon={Target} label="Completion" value="76%" />
-        <Metric icon={AlertCircle} label="Delayed training" value="9" />
-      </section>
-      <Panel title="Training Statistics">{trainings.map((item) => <TrainingRow key={item.title} item={item} />)}</Panel>
-    </div>
-  );
-}
-
 function PerformanceView({ workSets }) {
   return (
     <div className="stack">
@@ -1723,7 +1773,7 @@ function PerformanceView({ workSets }) {
 }
 
 function ReportsView({ executive, generatedReports = [], setGeneratedReports, showToast }) {
-  const reportNames = ['Data Entry Work Set Practical Report', 'Onboarding Summary', 'Training Completion', executive ? 'Executive Decision Pack' : 'Employee Progress'];
+  const reportNames = ['Data Entry Practical Report', 'Onboarding Summary', 'Training Completion', executive ? 'Executive Decision Pack' : 'Employee Progress'];
   const generateReport = (title) => {
     if (!generatedReports.includes(title)) {
       setGeneratedReports([...generatedReports, title]);
