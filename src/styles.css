@@ -2306,4 +2306,134 @@ tr:last-child td {
   color: var(--text);
 }
 
+/* Training Video Styles */
+.work-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 3px;
+}
+
+.video-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: rgba(0, 122, 255, 0.1);
+  color: var(--primary);
+  border: 1px solid rgba(0, 122, 255, 0.2);
+  font-size: 0.76rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: all 160ms ease;
+}
+
+.video-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.mobile-video-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: var(--radius-small);
+  background: rgba(0, 122, 255, 0.12);
+  color: var(--primary);
+  border: 1px solid rgba(0, 122, 255, 0.25);
+  font-size: 0.82rem;
+  font-weight: 650;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.mobile-video-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.video-modal {
+  width: min(100%, 780px);
+  display: grid;
+  gap: 16px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: #ffffff;
+  padding: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+}
+
+.video-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.video-modal-head h2 {
+  margin: 6px 0 2px;
+  font-size: 1.3rem;
+  font-weight: 650;
+}
+
+.video-modal-head p {
+  margin: 0;
+  color: var(--secondary);
+  font-size: 0.88rem;
+}
+
+.video-player-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  border-radius: var(--radius-small);
+  background: #000000;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.video-iframe,
+.video-element {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.hr-video-edit-bar {
+  padding: 10px 14px;
+  background: #fbfbfd;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-small);
+}
+
+.video-edit-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.video-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.video-instruction-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--secondary);
+}
+
 

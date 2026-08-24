@@ -20,6 +20,7 @@ import {
   Eye,
   EyeOff,
   FileText,
+  Film,
   Filter,
   HeartPulse,
   HelpCircle,
@@ -32,6 +33,7 @@ import {
   LogOut,
   NotebookTabs,
   PanelLeftClose,
+  Play,
   Plus,
   Search,
   ShieldCheck,
@@ -41,6 +43,7 @@ import {
   Upload,
   User,
   Users,
+  Video,
   WalletCards
 } from 'lucide-react';
 import './styles.css';
@@ -98,7 +101,7 @@ const trainings = [
 const notifications = [
   'Onboarding policy acknowledgement pending.',
   'Production Safety Essentials assigned for this month.',
-  'Data Entry (20 works) assigned inside My Training.',
+  'Data Entry (20 works) with demo videos assigned inside My Training.',
   'Assessment window closes on Sep 05.'
 ];
 
@@ -172,28 +175,28 @@ const onboardingSections = [
   }
 ];
 
-// Initial 20 Work Items for Data Entry
+// Initial 20 Work Items for Data Entry (With Video Links)
 const defaultWorkItems = [
-  { id: 'W-01', title: 'Compacting Card Entry', level: 'L1', description: 'Hard Work — Compacting department daily card entries & log verification', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 92, performanceStatus: 'Excellent', hrRemarks: 'Accurate entry and timely log submission.', hrApproved: true },
-  { id: 'W-02', title: 'Stenter Job Card Entry', level: 'L1', description: 'Hard Work — Stenter machine job card parameters logging', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 88, performanceStatus: 'Good', hrRemarks: 'Verified against machine output logs.', hrApproved: true },
-  { id: 'W-03', title: 'Stenter Batch Card Entry', level: 'L2', description: 'Medium Work — Batch identification and batch card updates', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 85, performanceStatus: 'Satisfactory', hrRemarks: 'Under 4-day practical observation.', hrApproved: false },
-  { id: 'W-04', title: 'LRN Lab Card Entry', level: 'L2', description: 'Medium Work — Lab research note card test value entry', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 90, performanceStatus: 'Good', hrRemarks: 'Well documented lab entries.', hrApproved: false },
-  { id: 'W-05', title: 'LDN Lab Card Entry', level: 'L2', description: 'Medium Work — Dyeing note lab card entry and verification', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
-  { id: 'W-06', title: 'LRN RC Card Entry', level: 'L2', description: 'Medium Work — Lab shade recipe card computer log', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 94, performanceStatus: 'Excellent', hrRemarks: 'Verified by Lab Incharge.', hrApproved: true },
-  { id: 'W-07', title: 'LDN RC Card Entry', level: 'L2', description: 'Medium Work — Dyeing lab RC card logging', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 82, performanceStatus: 'Satisfactory', hrRemarks: 'Good progress.', hrApproved: false },
-  { id: 'W-08', title: 'Lab RL', level: 'L3', description: 'Easy Work — Re-leveling lab test register entry', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 95, performanceStatus: 'Excellent', hrRemarks: 'Flawless execution.', hrApproved: true },
-  { id: 'W-09', title: 'Book Preparation', level: 'L3', description: 'Easy Work — Daily mill logbook index & binding prep', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 90, performanceStatus: 'Good', hrRemarks: 'Proper formatting.', hrApproved: true },
-  { id: 'W-10', title: 'Format Making', level: 'L2', description: 'Medium Work — Standard data entry template formatting', stageA: true, stageB: true, stageC: false, status: 'Practical', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
-  { id: 'W-11', title: 'Petrol Statement Preparation', level: 'L1', description: 'Hard Work — Fuel consumption logs and statement cross-verification', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
-  { id: 'W-12', title: 'Dryer Entry', level: 'L1', description: 'Hard Work — Thermal dryer operation card entry', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 89, performanceStatus: 'Good', hrRemarks: 'Good consistency.', hrApproved: true },
-  { id: 'W-13', title: 'QAD Entry', level: 'L2', description: 'Medium Work — Quality Assurance Department audit log', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 87, performanceStatus: 'Satisfactory', hrRemarks: '', hrApproved: false },
-  { id: 'W-14', title: 'Daily Movement Register Checking', level: 'L3', description: 'Easy Work — Gate movement & material transit audit', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 98, performanceStatus: 'Excellent', hrRemarks: 'High accuracy.', hrApproved: true },
-  { id: 'W-15', title: 'Transport Report', level: 'L1', description: 'Hard Work — Dispatch vehicle log & transport invoice tallying', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
-  { id: 'W-16', title: 'Contract Wages Manual Production Report', level: 'L1', description: 'Hard Work — Contract labor production tallying', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 91, performanceStatus: 'Good', hrRemarks: 'Timely calculation.', hrApproved: true },
-  { id: 'W-17', title: 'Stationary Follow-ups (PO, GRN, ISSUE, BMS)', level: 'L1', description: 'Hard Work — Store PO, GRN, Issue slips and BMS tracking', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 96, performanceStatus: 'Excellent', hrRemarks: 'Comprehensive tracking.', hrApproved: true },
-  { id: 'W-18', title: 'TDM Follow-ups', level: 'L3', description: 'Easy Work — Technical Data Management task follow-up', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 90, performanceStatus: 'Good', hrRemarks: '', hrApproved: true },
-  { id: 'W-19', title: 'ABC Chart Follow-ups', level: 'L3', description: 'Easy Work — Inventory ABC classification updating', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 93, performanceStatus: 'Excellent', hrRemarks: '', hrApproved: true },
-  { id: 'W-20', title: 'Production Card Upload to OD', level: 'L3', description: 'Easy Work — OD drive upload of daily production scans', stageA: false, stageB: false, stageC: false, status: 'Not Started', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false }
+  { id: 'W-01', title: 'Compacting Card Entry', level: 'L1', description: 'Hard Work — Compacting department daily card entries & log verification', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Compacting Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 92, performanceStatus: 'Excellent', hrRemarks: 'Accurate entry and timely log submission.', hrApproved: true },
+  { id: 'W-02', title: 'Stenter Job Card Entry', level: 'L1', description: 'Hard Work — Stenter machine job card parameters logging', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Stenter Job Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 88, performanceStatus: 'Good', hrRemarks: 'Verified against machine output logs.', hrApproved: true },
+  { id: 'W-03', title: 'Stenter Batch Card Entry', level: 'L2', description: 'Medium Work — Batch identification and batch card updates', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Stenter Batch Card Entry Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 85, performanceStatus: 'Satisfactory', hrRemarks: 'Under 4-day practical observation.', hrApproved: false },
+  { id: 'W-04', title: 'LRN Lab Card Entry', level: 'L2', description: 'Medium Work — Lab research note card test value entry', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'LRN Lab Card Entry Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 90, performanceStatus: 'Good', hrRemarks: 'Well documented lab entries.', hrApproved: false },
+  { id: 'W-05', title: 'LDN Lab Card Entry', level: 'L2', description: 'Medium Work — Dyeing note lab card entry and verification', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'LDN Lab Card Entry Demo', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
+  { id: 'W-06', title: 'LRN RC Card Entry', level: 'L2', description: 'Medium Work — Lab shade recipe card computer log', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'LRN RC Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 94, performanceStatus: 'Excellent', hrRemarks: 'Verified by Lab Incharge.', hrApproved: true },
+  { id: 'W-07', title: 'LDN RC Card Entry', level: 'L2', description: 'Medium Work — Dyeing lab RC card logging', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'LDN RC Card Entry Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 82, performanceStatus: 'Satisfactory', hrRemarks: 'Good progress.', hrApproved: false },
+  { id: 'W-08', title: 'Lab RL', level: 'L3', description: 'Easy Work — Re-leveling lab test register entry', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Lab RL Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 95, performanceStatus: 'Excellent', hrRemarks: 'Flawless execution.', hrApproved: true },
+  { id: 'W-09', title: 'Book Preparation', level: 'L3', description: 'Easy Work — Daily mill logbook index & binding prep', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Book Preparation Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 90, performanceStatus: 'Good', hrRemarks: 'Proper formatting.', hrApproved: true },
+  { id: 'W-10', title: 'Format Making', level: 'L2', description: 'Medium Work — Standard data entry template formatting', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Format Making Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
+  { id: 'W-11', title: 'Petrol Statement Preparation', level: 'L1', description: 'Hard Work — Fuel consumption logs and statement cross-verification', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Petrol Statement Demo', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
+  { id: 'W-12', title: 'Dryer Entry', level: 'L1', description: 'Hard Work — Thermal dryer operation card entry', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Dryer Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 89, performanceStatus: 'Good', hrRemarks: 'Good consistency.', hrApproved: true },
+  { id: 'W-13', title: 'QAD Entry', level: 'L2', description: 'Medium Work — Quality Assurance Department audit log', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'QAD Entry Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 87, performanceStatus: 'Satisfactory', hrRemarks: '', hrApproved: false },
+  { id: 'W-14', title: 'Daily Movement Register Checking', level: 'L3', description: 'Easy Work — Gate movement & material transit audit', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Daily Movement Register Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 98, performanceStatus: 'Excellent', hrRemarks: 'High accuracy.', hrApproved: true },
+  { id: 'W-15', title: 'Transport Report', level: 'L1', description: 'Hard Work — Dispatch vehicle log & transport invoice tallying', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Transport Report Demo', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
+  { id: 'W-16', title: 'Contract Wages Manual Production Report', level: 'L1', description: 'Hard Work — Contract labor production tallying', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Contract Wages Report Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 91, performanceStatus: 'Good', hrRemarks: 'Timely calculation.', hrApproved: true },
+  { id: 'W-17', title: 'Stationary Follow-ups (PO, GRN, ISSUE, BMS)', level: 'L1', description: 'Hard Work — Store PO, GRN, Issue slips and BMS tracking', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Stationary Follow-ups Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 96, performanceStatus: 'Excellent', hrRemarks: 'Comprehensive tracking.', hrApproved: true },
+  { id: 'W-18', title: 'TDM Follow-ups', level: 'L3', description: 'Easy Work — Technical Data Management task follow-up', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'TDM Follow-ups Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 90, performanceStatus: 'Good', hrRemarks: '', hrApproved: true },
+  { id: 'W-19', title: 'ABC Chart Follow-ups', level: 'L3', description: 'Easy Work — Inventory ABC classification updating', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'ABC Chart Follow-ups Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 93, performanceStatus: 'Excellent', hrRemarks: '', hrApproved: true },
+  { id: 'W-20', title: 'Production Card Upload to OD', level: 'L3', description: 'Easy Work — OD drive upload of daily production scans', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Production Card Upload Demo', stageA: false, stageB: false, stageC: false, status: 'Not Started', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false }
 ];
 
 const initialWorkSets = [
@@ -417,7 +420,7 @@ function Portal({ session, onLogout, showToast }) {
     showToast('Work stage progress updated');
   };
 
-  const hrUpdatePerformance = (workSetId, workId, score, performanceStatus, hrRemarks, hrApproved) => {
+  const hrUpdatePerformance = (workSetId, workId, score, performanceStatus, hrRemarks, hrApproved, videoUrl) => {
     const updated = workSets.map((set) => {
       if (set.id !== workSetId) return set;
       const updatedWorks = set.works.map((w) => {
@@ -427,13 +430,27 @@ function Portal({ session, onLogout, showToast }) {
           score: score !== '' && score !== null ? Number(score) : null,
           performanceStatus: performanceStatus || 'Pending',
           hrRemarks: hrRemarks || '',
-          hrApproved: Boolean(hrApproved)
+          hrApproved: Boolean(hrApproved),
+          videoUrl: videoUrl || w.videoUrl
         };
       });
       return { ...set, works: updatedWorks };
     });
     updateWorkSets(updated);
-    showToast('HR Performance record updated');
+    showToast('HR Performance & Video record updated');
+  };
+
+  const hrUpdateWorkVideo = (workSetId, workId, videoUrl) => {
+    const updated = workSets.map((set) => {
+      if (set.id !== workSetId) return set;
+      const updatedWorks = set.works.map((w) => {
+        if (w.id !== workId) return w;
+        return { ...w, videoUrl };
+      });
+      return { ...set, works: updatedWorks };
+    });
+    updateWorkSets(updated);
+    showToast('Training video link updated');
   };
 
   const hrAddWorkItem = (workSetId, newItem) => {
@@ -445,6 +462,8 @@ function Portal({ session, onLogout, showToast }) {
         title: newItem.title,
         level: newItem.level || 'L2',
         description: newItem.description || `${newItem.level || 'L2'} — ${newItem.title}`,
+        videoUrl: newItem.videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+        videoTitle: `${newItem.title} Demo`,
         stageA: false,
         stageB: false,
         stageC: false,
@@ -457,7 +476,7 @@ function Portal({ session, onLogout, showToast }) {
       return { ...set, works: [...set.works, itemToAdd] };
     });
     updateWorkSets(updated);
-    showToast('New work item added to Data Entry');
+    showToast('New work item added with video');
   };
 
   const hrCreateWorkSet = (newSetData) => {
@@ -576,6 +595,7 @@ function Portal({ session, onLogout, showToast }) {
           workSets={workSets}
           toggleWorkStage={toggleWorkStage}
           hrUpdatePerformance={hrUpdatePerformance}
+          hrUpdateWorkVideo={hrUpdateWorkVideo}
           hrAddWorkItem={hrAddWorkItem}
           hrCreateWorkSet={hrCreateWorkSet}
           setActive={setActive}
@@ -633,7 +653,7 @@ function Content(props) {
 }
 
 function EmployeeContent(props) {
-  const { active, session, completed, onboardingPercent, markSection, completeAll, showToast, trainingItems, setTrainingItems, workSets, toggleWorkStage, setActive, openModal } = props;
+  const { active, session, completed, onboardingPercent, markSection, completeAll, showToast, trainingItems, setTrainingItems, workSets, toggleWorkStage, setActive, openModal, hrUpdateWorkVideo } = props;
 
   if (active === 'Onboarding') return <Onboarding completed={completed} markSection={markSection} completeAll={completeAll} percent={onboardingPercent} />;
   if (active === 'My Training' || active === 'Data Entry Work Set' || active === 'Data Entry') {
@@ -646,6 +666,7 @@ function EmployeeContent(props) {
         setTrainingItems={setTrainingItems}
         workSets={workSets}
         toggleWorkStage={toggleWorkStage}
+        hrUpdateWorkVideo={hrUpdateWorkVideo}
         openModal={openModal}
         initialSubTab="WORK_SET"
       />
@@ -770,13 +791,14 @@ function Onboarding({ completed, markSection, completeAll, percent }) {
   );
 }
 
-// Data Entry Main View Component
-function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerformance, showToast }) {
+// Data Entry Main View Component (With Video Support)
+function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, showToast }) {
   const [search, setSearch] = useState('');
   const [levelFilter, setLevelFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [showHelp, setShowHelp] = useState(true);
   const [selectedWorkForHr, setSelectedWorkForHr] = useState(null);
+  const [selectedVideoWork, setSelectedVideoWork] = useState(null);
 
   if (!workSet) return <div className="empty">No Data Entry assigned.</div>;
 
@@ -923,7 +945,7 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
           <thead>
             <tr>
               <th style={{ width: '50px' }}>S.No</th>
-              <th>Work Details</th>
+              <th>Work Details & Training Video</th>
               <th style={{ width: '100px' }}>Level</th>
               <th style={{ width: '60px', textAlign: 'center' }} title="A — Learned">A</th>
               <th style={{ width: '60px', textAlign: 'center' }} title="B — Practical Data Entry">B</th>
@@ -945,7 +967,17 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
                 <tr key={item.id} className={`work-row ${item.status.toLowerCase().replace(' ', '-')}`}>
                   <td className="sno-cell">{index + 1}</td>
                   <td className="work-details-cell">
-                    <strong className="work-title">{item.title}</strong>
+                    <div className="work-title-row">
+                      <strong className="work-title">{item.title}</strong>
+                      <button
+                        type="button"
+                        className="video-btn"
+                        onClick={() => setSelectedVideoWork(item)}
+                        title="Watch practical demo video for this task"
+                      >
+                        <Play size={12} /> Watch Video
+                      </button>
+                    </div>
                     <p className="work-desc">{item.description}</p>
                   </td>
                   <td>
@@ -1031,6 +1063,15 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
               <h3 className="mobile-work-title">{item.title}</h3>
               <p className="mobile-work-desc">{item.description}</p>
 
+              {/* Mobile Watch Video Button */}
+              <button
+                type="button"
+                className="mobile-video-btn"
+                onClick={() => setSelectedVideoWork(item)}
+              >
+                <Play size={14} /> Watch Training Video Demo
+              </button>
+
               {/* Mobile Stage Checkboxes */}
               <div className="mobile-stages-row">
                 <label className={`mobile-stage-btn ${item.stageA ? 'checked' : ''} ${role !== 'HR' ? 'readonly' : ''}`}>
@@ -1085,6 +1126,18 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
         )}
       </div>
 
+      {/* Video Player Modal */}
+      {selectedVideoWork && (
+        <WorkVideoModal
+          item={selectedVideoWork}
+          role={role}
+          onClose={() => setSelectedVideoWork(null)}
+          onUpdateVideo={(workId, newUrl) => {
+            if (hrUpdateWorkVideo) hrUpdateWorkVideo(workSet.id, workId, newUrl);
+          }}
+        />
+      )}
+
       {/* HR Evaluation Modal */}
       {selectedWorkForHr && (
         <HrPerformanceModal
@@ -1097,17 +1150,103 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
   );
 }
 
+// Training Video Modal Component
+function WorkVideoModal({ item, onClose, role, onUpdateVideo }) {
+  const [editing, setEditing] = useState(false);
+  const [videoUrl, setVideoUrl] = useState(item.videoUrl || '');
+
+  const handleSaveVideo = (e) => {
+    e.preventDefault();
+    if (onUpdateVideo) {
+      onUpdateVideo(item.id, videoUrl);
+    }
+    setEditing(false);
+  };
+
+  let embedUrl = videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+  if (embedUrl.includes('watch?v=')) {
+    embedUrl = embedUrl.replace('watch?v=', 'embed/');
+  }
+
+  return (
+    <div className="modal-backdrop" role="presentation">
+      <div className="video-modal">
+        <div className="video-modal-head">
+          <div>
+            <div className="workset-badge-group margin-bottom-xs">
+              <span className={`badge-level ${item.level.toLowerCase()}`}>{item.level}</span>
+              <span className="badge-pill primary">Practical Training Video</span>
+            </div>
+            <h2>{item.title}</h2>
+            <p>{item.description}</p>
+          </div>
+          <button className="icon-button" type="button" onClick={onClose}>X</button>
+        </div>
+
+        {/* Video Player Frame */}
+        <div className="video-player-container">
+          {embedUrl.endsWith('.mp4') || embedUrl.endsWith('.webm') ? (
+            <video controls src={embedUrl} className="video-element" autoPlay>
+              Your browser does not support video playback.
+            </video>
+          ) : (
+            <iframe
+              src={embedUrl}
+              title={`${item.title} Training Video`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="video-iframe"
+            />
+          )}
+        </div>
+
+        {/* HR Edit Video Link Form */}
+        {role === 'HR' && (
+          <div className="hr-video-edit-bar">
+            {editing ? (
+              <form onSubmit={handleSaveVideo} className="video-edit-form">
+                <input
+                  type="text"
+                  value={videoUrl}
+                  onChange={(e) => setVideoUrl(e.target.value)}
+                  placeholder="Paste YouTube embed URL or MP4 video link..."
+                  className="input-wrap flex-1"
+                />
+                <button type="submit" className="primary-button compact">Save Video Link</button>
+                <button type="button" className="secondary-button compact" onClick={() => setEditing(false)}>Cancel</button>
+              </form>
+            ) : (
+              <button className="link-button" type="button" onClick={() => setEditing(true)}>
+                <Edit3 size={14} /> Edit Video Link (HR Only)
+              </button>
+            )}
+          </div>
+        )}
+
+        <div className="video-modal-footer">
+          <div className="video-instruction-note">
+            <Info size={16} />
+            <span>Watch the practical video demo carefully before logging entries on the system.</span>
+          </div>
+          <button className="primary-button compact" type="button" onClick={onClose}>Close Video</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // HR Performance Evaluation Modal
 function HrPerformanceModal({ target, onClose, onSave }) {
   const { workSetId, item } = target;
   const [score, setScore] = useState(item.score !== null ? item.score : '');
   const [perfStatus, setPerfStatus] = useState(item.performanceStatus || 'Satisfactory');
   const [remarks, setRemarks] = useState(item.hrRemarks || '');
+  const [videoUrl, setVideoUrl] = useState(item.videoUrl || '');
   const [approved, setApproved] = useState(Boolean(item.hrApproved));
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(workSetId, item.id, score, perfStatus, remarks, approved);
+    onSave(workSetId, item.id, score, perfStatus, remarks, approved, videoUrl);
     onClose();
   };
 
@@ -1139,6 +1278,12 @@ function HrPerformanceModal({ target, onClose, onSave }) {
             </div>
           </label>
           <label>
+            Training Video Link (YouTube embed or MP4 URL)
+            <div className="input-wrap">
+              <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="e.g. https://www.youtube.com/embed/..." />
+            </div>
+          </label>
+          <label>
             HR Remarks / Observations
             <div className="input-wrap">
               <textarea rows={3} value={remarks} onChange={(e) => setRemarks(e.target.value)} placeholder="Enter HR comments or practical feedback..." style={{ width: '100%', border: 0, outline: 0, background: 'transparent', padding: '8px 0', fontFamily: 'inherit' }} />
@@ -1159,7 +1304,7 @@ function HrPerformanceModal({ target, onClose, onSave }) {
 }
 
 // HR Work Sets Manager View Component
-function HrWorkSetManager({ workSets, toggleWorkStage, hrUpdatePerformance, hrAddWorkItem, hrCreateWorkSet, showToast }) {
+function HrWorkSetManager({ workSets, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, hrAddWorkItem, hrCreateWorkSet, showToast }) {
   const [selectedSetId, setSelectedSetId] = useState(workSets[0]?.id || '');
   const [showAddWorkModal, setShowAddWorkModal] = useState(false);
   const [showCreateSetModal, setShowCreateSetModal] = useState(false);
@@ -1172,7 +1317,7 @@ function HrWorkSetManager({ workSets, toggleWorkStage, hrUpdatePerformance, hrAd
         <div>
           <p className="eyebrow">HR TRAINING ADMINISTRATION</p>
           <h2>Data Entry</h2>
-          <p>Create work sets, assign 20+ data entry items, set difficulty levels, and verify practical performance.</p>
+          <p>Create work sets, assign 20+ data entry items with video demos, set difficulty levels, and verify practical performance.</p>
         </div>
         <div className="top-actions">
           <button className="secondary-button compact" onClick={() => setShowAddWorkModal(true)}>
@@ -1207,6 +1352,7 @@ function HrWorkSetManager({ workSets, toggleWorkStage, hrUpdatePerformance, hrAd
           role="HR"
           toggleWorkStage={toggleWorkStage}
           hrUpdatePerformance={hrUpdatePerformance}
+          hrUpdateWorkVideo={hrUpdateWorkVideo}
           showToast={showToast}
         />
       ) : (
@@ -1239,11 +1385,12 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
   const [title, setTitle] = useState('');
   const [level, setLevel] = useState('L2');
   const [description, setDescription] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title.trim()) return;
-    onAdd(workSet.id, { title, level, description });
+    onAdd(workSet.id, { title, level, description, videoUrl });
     onClose();
   };
 
@@ -1278,6 +1425,12 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
               <input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="e.g. Daily fabric defect log verification" />
             </div>
           </label>
+          <label>
+            Training Video Link (YouTube embed or MP4 URL)
+            <div className="input-wrap">
+              <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="e.g. https://www.youtube.com/embed/..." />
+            </div>
+          </label>
         </div>
         <div className="modal-actions">
           <button className="secondary-button" type="button" onClick={onClose}>Cancel</button>
@@ -1305,7 +1458,7 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
         <div className="modal-head">
           <div>
             <h2>Assign New Data Entry Work Set</h2>
-            <p>Assign default 20-item Data Entry set to an employee.</p>
+            <p>Assign default 20-item Data Entry set with video demos to an employee.</p>
           </div>
           <button className="icon-button" type="button" onClick={onClose}>X</button>
         </div>
@@ -1428,7 +1581,7 @@ function MdWorkSetOverview({ workSets }) {
 }
 
 function HrContent(props) {
-  const { active, session, showToast, trainingItems, setTrainingItems, generatedReports, setGeneratedReports, openModal, workSets, toggleWorkStage, hrUpdatePerformance, hrAddWorkItem, hrCreateWorkSet } = props;
+  const { active, session, showToast, trainingItems, setTrainingItems, generatedReports, setGeneratedReports, openModal, workSets, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, hrAddWorkItem, hrCreateWorkSet } = props;
 
   if (active === 'Employees') return <EmployeesView showToast={showToast} openModal={openModal} />;
   if (active === 'Training' || active === 'Data Entry') {
@@ -1443,6 +1596,7 @@ function HrContent(props) {
         workSets={workSets}
         toggleWorkStage={toggleWorkStage}
         hrUpdatePerformance={hrUpdatePerformance}
+        hrUpdateWorkVideo={hrUpdateWorkVideo}
         hrAddWorkItem={hrAddWorkItem}
         hrCreateWorkSet={hrCreateWorkSet}
         initialSubTab="WORK_SET"
@@ -1484,7 +1638,7 @@ function HrDashboard({ showToast, openModal, workSets }) {
       </div>
       <div className="simple-two-column">
         <SimpleCard icon={History} title="Recent Employee Activity">
-          <SimpleList items={['Arun updated Compacting Card Entry stage to Practical', 'Nisha completed Accounts Data Entry', 'Rahul onboarding in grace review']} />
+          <SimpleList items={['Arun watched Compacting Card Entry training video', 'Nisha completed Accounts Data Entry', 'Rahul onboarding in grace review']} />
         </SimpleCard>
         <SimpleCard icon={BriefcaseBusiness} title="Quick Actions">
           <div className="quick-actions">
@@ -1507,7 +1661,7 @@ function HrDashboard({ showToast, openModal, workSets }) {
 }
 
 function MdContent(props) {
-  const { active, session, showToast, generatedReports, setGeneratedReports, approvalItems, setApprovalItems, workSets, toggleWorkStage, openModal, trainingItems, setTrainingItems } = props;
+  const { active, session, showToast, generatedReports, setGeneratedReports, approvalItems, setApprovalItems, workSets, toggleWorkStage, openModal, trainingItems, setTrainingItems, hrUpdateWorkVideo } = props;
 
   if (active === 'Employees') return <EmployeesView readOnly />;
   if (active === 'Training Overview' || active === 'Data Entry Analytics' || active === 'Data Entry') {
@@ -1521,6 +1675,7 @@ function MdContent(props) {
         openModal={openModal}
         workSets={workSets}
         toggleWorkStage={toggleWorkStage}
+        hrUpdateWorkVideo={hrUpdateWorkVideo}
         initialSubTab="WORK_SET"
       />
     );
@@ -1635,7 +1790,7 @@ function OnboardingMonitor() {
 }
 
 // Unified TrainingView with Sub-Tabs
-function TrainingView({ role, session, showToast, trainingItems = trainings, setTrainingItems, openModal, workSets, toggleWorkStage, hrUpdatePerformance, hrAddWorkItem, hrCreateWorkSet, initialSubTab = 'WORK_SET' }) {
+function TrainingView({ role, session, showToast, trainingItems = trainings, setTrainingItems, openModal, workSets, toggleWorkStage, hrUpdatePerformance, hrUpdateWorkVideo, hrAddWorkItem, hrCreateWorkSet, initialSubTab = 'WORK_SET' }) {
   const [activeTab, setActiveTab] = useState(initialSubTab);
   const isHr = role === 'HR' || role === 'hr';
   const isMd = role === 'MD' || role === 'md';
@@ -1672,6 +1827,7 @@ function TrainingView({ role, session, showToast, trainingItems = trainings, set
             workSet={userSet}
             role="EMPLOYEE"
             toggleWorkStage={toggleWorkStage}
+            hrUpdateWorkVideo={hrUpdateWorkVideo}
             showToast={showToast}
           />
         ) : isHr ? (
@@ -1679,6 +1835,7 @@ function TrainingView({ role, session, showToast, trainingItems = trainings, set
             workSets={workSets}
             toggleWorkStage={toggleWorkStage}
             hrUpdatePerformance={hrUpdatePerformance}
+            hrUpdateWorkVideo={hrUpdateWorkVideo}
             hrAddWorkItem={hrAddWorkItem}
             hrCreateWorkSet={hrCreateWorkSet}
             showToast={showToast}
