@@ -217,7 +217,7 @@ const initialWorkSets = [
   },
   {
     id: 'WS-102',
-    name: 'Accounts & Office Data Entry',
+    name: 'Data Entry',
     employeeId: 'EMP-1087',
     employeeName: 'Nisha Raj',
     department: 'Office',
@@ -2025,39 +2025,22 @@ function TrainingView({ role, session, showToast, trainingItems = trainings, set
 
   return (
     <div className="stack">
-      {/* Dynamic Sub Navigation Bar for Training */}
+      {/* Sub Navigation Bar for Training */}
       <div className="training-subnav-tabs">
-        {displaySets.map((set) => (
-          <button
-            key={set.id}
-            type="button"
-            className={`subnav-tab ${activeTab === set.id || (activeTab === 'WORK_SET' && set.id === displaySets[0]?.id) ? 'active' : ''}`}
-            onClick={() => setActiveTab(set.id)}
-          >
-            <Layers size={17} />
-            <span>{set.name}</span>
-          </button>
-        ))}
-
-        {/* HR + Add Data Entry Tab button right in top tab bar */}
-        {isHr && (
-          <button
-            type="button"
-            className="subnav-tab create-tab"
-            onClick={() => setShowCreateSetModal(true)}
-            title="Create a new Data Entry set"
-          >
-            <Plus size={16} />
-            <span>+ Create Data Entry</span>
-          </button>
-        )}
-
+        <button
+          type="button"
+          className={`subnav-tab ${activeTab !== 'MATERIALS' ? 'active' : ''}`}
+          onClick={() => setActiveTab('WORK_SET')}
+        >
+          <Layers size={18} />
+          <span>Data Entry</span>
+        </button>
         <button
           type="button"
           className={`subnav-tab ${activeTab === 'MATERIALS' ? 'active' : ''}`}
           onClick={() => setActiveTab('MATERIALS')}
         >
-          <BookOpen size={17} />
+          <BookOpen size={18} />
           <span>Videos & Course Materials</span>
         </button>
       </div>
