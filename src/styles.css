@@ -2757,4 +2757,29 @@ tr:last-child td {
   line-height: 1.35;
 }
 
+/* Completion Certificate Celebration Banner */
+.completion-certificate-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, #eaf8ee 0%, #d3f3db 100%);
+  border: 1px solid #34c759;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  color: #1b5e20;
+  box-shadow: 0 4px 16px rgba(52, 199, 89, 0.15);
+}
+
+.completion-certificate-banner h3 {
+  margin: 0 0 2px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1b5e20;
+}
+
+.completion-certificate-banner p {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
 

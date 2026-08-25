@@ -859,6 +859,17 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
 
   return (
     <div className="stack">
+      {/* 100% Completion Certificate Celebration Banner */}
+      {stats.progressPercent === 100 && (
+        <div className="completion-certificate-banner">
+          <Award size={32} />
+          <div>
+            <h3>🏆 Official Certificate of Practical Completion</h3>
+            <p>Congratulations <strong>{workSet.employeeName}</strong>! All practical tasks for <strong>{workSet.name}</strong> are 100% completed and HR verified.</p>
+          </div>
+        </div>
+      )}
+
       {/* Header Banner */}
       <section className="workset-header-card">
         <div className="workset-header-top">
