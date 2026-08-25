@@ -777,12 +777,17 @@ function EmployeeContent(props) {
 function EmployeeDashboard({ session, onboardingPercent, trainingItems, workSet, setActive }) {
   const getItemStatus = (item) => {
     if (!item) return 'Not Started';
-    if (item.stageA && item.stageB && item.stageC) return 'Completed';
-    if (item.status === 'Completed') return 'Completed';
-    if (item.stageA && (item.stageB || item.stageC)) return 'Practical';
-    if (item.status === 'Practical') return 'Practical';
-    if (item.stageA || item.status === 'Learned') return 'Learned';
-    return 'Not Started';
+    if (item.status === 'Completed' || item.hrApproved || (item.stageA && item.stageB && item.stageC)) return 'Completed';
+    if (item.status === 'Practical' || (item.stageA && (item.stageB || item.stageC))) return 'Practical';
+    if (item.status === 'Learned' || item.stageA) return 'Learned';
+    return item.status || 'Not Started';
+  };
+
+  const getLevelBadgeText = (level) => {
+    if (level === 'L1') return 'L1 — Easy';
+    if (level === 'L2') return 'L2 — Moderate';
+    if (level === 'L3') return 'L3 — Challenging';
+    return level || 'L1 — Easy';
   };
 
   const works = workSet ? (workSet.works || []) : defaultWorkItems;
@@ -876,20 +881,24 @@ function EmployeeDashboard({ session, onboardingPercent, trainingItems, workSet,
             <p className="text-secondary text-sm margin-bottom-sm">
               Role Category: <strong>{workSet ? workSet.name : 'Data Entry'}</strong> · Assigned Date: {workSet ? workSet.assignedDate : '2026-08-15'}
             </p>
-            <div className="workset-table-container">
-              <table className="workset-table">
+            <div className="workset-table-container no-scroll-x">
+              <table className="workset-table compact-table">
                 <thead>
                   <tr>
-                    <th>Task Title</th>
-                    <th>Level</th>
-                    <th>Status</th>
+                    <th style={{ width: '50%' }}>Task Title</th>
+                    <th style={{ width: '28%' }}>Level</th>
+                    <th style={{ width: '22%' }}>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {works.slice(0, 4).map((item) => (
                     <tr key={item.id} className="work-row">
-                      <td><strong>{item.title}</strong></td>
-                      <td><span className={`badge-level ${item.level.toLowerCase()}`}>{item.level}</span></td>
+                      <td><strong className="emp-table-name">{item.title}</strong></td>
+                      <td>
+                        <span className={`badge-level ${(item.level || 'L1').toLowerCase()}`}>
+                          {getLevelBadgeText(item.level)}
+                        </span>
+                      </td>
                       <td>
                         <span className={`badge ${getItemStatus(item) === 'Completed' ? 'success' : ''}`}>
                           {getItemStatus(item) === 'Completed' ? '🟢 Completed' : '🔵 In Progress'}
