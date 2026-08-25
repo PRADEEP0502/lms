@@ -2018,75 +2018,50 @@ function MdDashboard({ approvalItems = [], workSets = [], setApprovalItems, show
 
   return (
     <div className="stack">
-      {/* Executive Grand Welcome Banner */}
-      <section className="md-hero-banner">
-        <div className="md-hero-content">
-          <div className="md-hero-badge-group">
-            <span className="badge-pill primary-light">Managing Director Executive Hub</span>
-            <span className="badge-pill success-light">Live Mill Control</span>
+      {/* Clean & Simple Executive Welcome Banner */}
+      <section className="simple-welcome-card">
+        <div className="welcome-content">
+          <div className="badge-group margin-bottom-xs">
+            <span className="badge primary">Executive Portal</span>
+            <span className="badge success">Live Sync</span>
           </div>
           <h2>Welcome, Dev Menon</h2>
-          <p>
-            Real-time workforce readiness, practical training execution across Data Entry, Dispatch, QC, and corporate approval decisions for Junior Processing Mill.
-          </p>
-          <div className="md-hero-kpis">
-            <span className="kpi-pill"><Award size={14} /> Overall Readiness: 86%</span>
-            <span className="kpi-pill"><Target size={14} /> Active Roles: 5 Departments</span>
-            <span className="kpi-pill"><ShieldCheck size={14} /> Security Compliance: 100%</span>
-          </div>
+          <p>Management-focused LMS and Practical Role Training summary for Junior Processing Mill.</p>
         </div>
       </section>
 
-      {/* 4 Grand Metric Cards */}
-      <div className="md-grand-metrics">
-        <article className="md-metric-card">
-          <div className="metric-header">
-            <div className="metric-icon-box blue"><Users size={24} /></div>
-            <span className="trend-badge positive">+12 this month</span>
-          </div>
-          <div className="metric-body">
+      {/* 4 Clean Metric Cards */}
+      <div className="simple-stats-grid">
+        <article className="simple-stat-card">
+          <div className="stat-icon-box blue"><Users size={22} /></div>
+          <div>
             <strong>124</strong>
-            <span>Total Workforce</span>
+            <span>Total Employees</span>
           </div>
-          <p className="metric-foot">Active across 5 mill departments</p>
         </article>
 
-        <article className="md-metric-card">
-          <div className="metric-header">
-            <div className="metric-icon-box green"><Layers size={24} /></div>
-            <span className="trend-badge positive">{completedWorksCount}/{totalWorksCount} Done</span>
-          </div>
-          <div className="metric-body">
+        <article className="simple-stat-card">
+          <div className="stat-icon-box green"><Layers size={22} /></div>
+          <div>
             <strong>{completedRate}%</strong>
-            <span>Role Practical Completion</span>
+            <span>Role Tasks Completion ({completedWorksCount}/{totalWorksCount})</span>
           </div>
-          <p className="metric-foot">Data Entry, Dispatch, HR, QC</p>
         </article>
 
-        <article className="md-metric-card">
-          <div className="metric-header">
-            <div className="metric-icon-box purple"><BookOpen size={24} /></div>
-            <span className="trend-badge neutral">18 Courses</span>
-          </div>
-          <div className="metric-body">
+        <article className="simple-stat-card">
+          <div className="stat-icon-box purple"><BookOpen size={22} /></div>
+          <div>
             <strong>76%</strong>
-            <span>Training & Assessment</span>
+            <span>Training Completion</span>
           </div>
-          <p className="metric-foot">7 open assessments</p>
         </article>
 
-        <article className="md-metric-card">
-          <div className="metric-header">
-            <div className="metric-icon-box orange"><ShieldCheck size={24} /></div>
-            <span className={`trend-badge ${pendingApprovals > 0 ? 'warning' : 'positive'}`}>
-              {pendingApprovals} Pending
-            </span>
-          </div>
-          <div className="metric-body">
+        <article className="simple-stat-card">
+          <div className="stat-icon-box orange"><ShieldCheck size={22} /></div>
+          <div>
             <strong>{pendingApprovals}</strong>
-            <span>Pending Decisions</span>
+            <span>Pending Approvals</span>
           </div>
-          <p className="metric-foot">Budget & Reports Review</p>
         </article>
       </div>
 
@@ -2094,27 +2069,20 @@ function MdDashboard({ approvalItems = [], workSets = [], setApprovalItems, show
       <div className="md-chart-grid">
         <section className="md-chart-card">
           <div className="md-chart-head">
-            <div>
-              <h3>Practical Readiness Rings</h3>
-              <p>Live progress tracking across key learning tracks</p>
-            </div>
-            <span className="badge success">Live Sync</span>
+            <h3>Company Progress</h3>
+            <span className="badge success">Live</span>
           </div>
           <div className="md-ring-row margin-top-md">
             <MdChartRing value={82} label="Onboarding" />
             <MdChartRing value={completedRate} label="Role Tasks" />
             <MdChartRing value={76} label="Training" />
-            <MdChartRing value={90} label="Dispatch" />
           </div>
         </section>
 
         <section className="md-chart-card">
           <div className="md-chart-head">
-            <div>
-              <h3>Department Execution Breakdown</h3>
-              <p>Practical completion percentage by department</p>
-            </div>
-            <span className="badge">This Month</span>
+            <h3>Department Progress</h3>
+            <span className="badge">This month</span>
           </div>
           <div className="margin-top-md">
             <MdBarChart />
@@ -2124,15 +2092,15 @@ function MdDashboard({ approvalItems = [], workSets = [], setApprovalItems, show
 
       {/* Three Column Action Cards */}
       <div className="simple-three-column">
-        <SimpleCard icon={Bell} title="Important Mill Updates">
+        <SimpleCard icon={Bell} title="Recent Important Updates">
           <SimpleList items={[
             'Data Entry & Dispatch tasks 80% completed by employees',
-            'Monthly executive learning report is generated & ready',
-            '4 grace-period onboarding reviews assigned to HR'
+            'Monthly learning report is ready for review',
+            '7 assessments currently open across departments'
           ]} />
         </SimpleCard>
 
-        <SimpleCard icon={ShieldCheck} title="Pending Approvals">
+        <SimpleCard icon={ShieldCheck} title="Pending Decisions">
           <div className="decision-list">
             {approvalItems.map((item) => (
               <div key={item.id} className="approval-row-item">
@@ -2150,11 +2118,11 @@ function MdDashboard({ approvalItems = [], workSets = [], setApprovalItems, show
           </div>
         </SimpleCard>
 
-        <SimpleCard icon={FileText} title="Executive Decision Reports">
+        <SimpleCard icon={FileText} title="Quick Reports">
           <SimpleList items={[
-            'Role Tasks Practical Summary',
-            'Onboarding Grace-Period Audit',
-            'Departmental Training Health Index'
+            'Role Practical Tasks Summary',
+            'Onboarding Summary Report',
+            'Assessment & Performance Status'
           ]} />
         </SimpleCard>
       </div>
