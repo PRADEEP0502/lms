@@ -830,40 +830,53 @@ label {
 .md-ring-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.md-ring-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .md-ring {
-  width: 116px;
-  height: 116px;
+  width: 108px;
+  height: 108px;
   display: grid;
   place-items: center;
-  justify-self: center;
   border-radius: 50%;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  transition: transform 180ms ease;
 }
 
-.md-ring > div {
-  width: 84px;
-  height: 84px;
+.md-ring:hover {
+  transform: scale(1.04);
+}
+
+.md-ring-center {
+  width: 78px;
+  height: 78px;
   display: grid;
   place-items: center;
-  align-content: center;
   border-radius: 50%;
   background: #ffffff;
-  text-align: center;
-  box-shadow: inset 0 0 0 1px var(--line);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
 }
 
-.md-ring strong,
-.md-mini-stat strong {
-  font-size: 1.15rem;
+.md-ring-center strong {
+  font-size: 1.25rem;
+  font-weight: 750;
+  color: var(--text);
+}
+
+.md-ring-caption {
+  font-size: 0.84rem;
   font-weight: 650;
-}
-
-.md-ring span,
-.md-mini-stat span {
-  color: var(--muted);
-  font-size: 0.78rem;
+  color: var(--text);
+  text-align: center;
+  white-space: nowrap;
 }
 
 .md-bars {

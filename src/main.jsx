@@ -2848,11 +2848,13 @@ function MdChartRing({ value, label = '', color = 'var(--primary)' }) {
   const style = { background: `conic-gradient(${color} ${degrees}deg, #ececf1 0deg)` };
 
   return (
-    <div className="md-ring" style={style}>
-      <div>
-        <strong>{safeValue}%</strong>
-        <span>{label}</span>
+    <div className="md-ring-container">
+      <div className="md-ring" style={style}>
+        <div className="md-ring-center">
+          <strong>{safeValue}%</strong>
+        </div>
       </div>
+      <span className="md-ring-caption">{label}</span>
     </div>
   );
 }
