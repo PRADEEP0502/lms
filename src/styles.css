@@ -873,9 +873,9 @@ label {
 
 .md-bar-line {
   display: grid;
-  grid-template-columns: 104px minmax(0, 1fr) 48px;
+  grid-template-columns: 160px minmax(0, 1fr) 48px;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .md-bar-line span {
@@ -885,7 +885,9 @@ label {
 
 .md-bar-line strong {
   text-align: right;
-  font-weight: 650;
+  font-weight: 700;
+  color: var(--text);
+  font-size: 0.9rem;
 }
 
 .md-profile-panel {
@@ -2986,12 +2988,21 @@ tr:last-child td {
   display: flex;
   align-items: center;
   gap: 6px;
-  width: 120px;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.md-bar-info span:first-child {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.88rem;
 }
 
 .md-bar-count {
-  font-size: 0.75rem;
+  font-size: 0.76rem;
   color: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 
