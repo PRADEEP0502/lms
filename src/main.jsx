@@ -1803,50 +1803,90 @@ function HrCreateWorkSetModal({ employees, onClose, onCreate }) {
 }
 
 // MD Practical Training Analytics Component
-function MdWorkSetOverview({ workSets }) {
-  const allWorks = workSets.flatMap((s) => s.works || []);
+function MdWorkSetOverview({ workSets = [] }) {
+  const getItemStatus = (item) => {
+    if (item.stageA && item.stageB && item.stageC) return 'Completed';
+    if (item.stageA && (item.stageB || item.stageC)) return 'Practical';
+    if (item.stageA) return 'Learned';
+    return item.status || 'Not Started';
+  };
+
+  const allWorks = (workSets || []).flatMap((s) => s.works || []);
   const total = allWorks.length;
-  const completed = allWorks.filter((w) => w.status === 'Completed').length;
-  const practical = allWorks.filter((w) => w.status === 'Practical').length;
+  const completed = allWorks.filter((w) => getItemStatus(w) === 'Completed').length;
+  const practical = allWorks.filter((w) => getItemStatus(w) === 'Practical').length;
 
   const l1Works = allWorks.filter((w) => w.level === 'L1');
   const l2Works = allWorks.filter((w) => w.level === 'L2');
   const l3Works = allWorks.filter((w) => w.level === 'L3');
 
-  const l1Completed = Math.round((l1Works.filter((w) => w.status === 'Completed').length / (l1Works.length || 1)) * 100);
-  const l2Completed = Math.round((l2Works.filter((w) => w.status === 'Completed').length / (l2Works.length || 1)) * 100);
-  const l3Completed = Math.round((l3Works.filter((w) => w.status === 'Completed').length / (l3Works.length || 1)) * 100);
+  const l1Completed = Math.round((l1Works.filter((w) => getItemStatus(w) === 'Completed').length / (l1Works.length || 1)) * 100);
+  const l2Completed = Math.round((l2Works.filter((w) => getItemStatus(w) === 'Completed').length / (l2Works.length || 1)) * 100);
+  const l3Completed = Math.round((l3Works.filter((w) => getItemStatus(w) === 'Completed').length / (l3Works.length || 1)) * 100);
 
   const overallPercent = total > 0 ? Math.round((completed / total) * 100) : 0;
 
   return (
     <div className="stack">
-      <section className="section-head executive">
-        <div>
-          <p className="eyebrow">Executive Leadership Overview</p>
-          <h2>Role Tasks & Practical Analytics</h2>
-          <p>Mill-wide practical training execution stats across Data Entry, Dispatch, HR, QC, and employee role categories.</p>
+      {/* Header Banner */}
+      <section className="workset-header-card">
+        <div className="workset-header-top">
+          <div>
+            <div className="workset-badge-group">
+              <span className="badge-pill primary">Executive Leadership Overview</span>
+              <span className="badge-pill success">Live Sync</span>
+            </div>
+            <h2>Role Tasks & Practical Analytics</h2>
+            <p className="workset-employee-meta">
+              Mill-wide practical training execution stats across Data Entry, Dispatch, HR, QC, and employee role categories.
+            </p>
+          </div>
+          <div className="workset-progress-ring-box">
+            <div className="workset-progress-big">
+              <strong>{completed} / {total}</strong>
+              <span>Tasks Completed</span>
+            </div>
+            <div className="workset-progress-bar-wrap">
+              <div className="workset-progress-bar">
+                <span style={{ width: `${overallPercent}%`, background: '#34c759' }} />
+              </div>
+              <span className="workset-percent-label">{overallPercent}% Practical Readiness</span>
+            </div>
+          </div>
         </div>
-        <ProgressRing value={overallPercent} label="Practical Readiness" />
+
+        {/* 4 Stat Pills */}
+        <div className="workset-stats-grid">
+          <div className="workset-stat-pill">
+            <span className="stat-num">{total}</span>
+            <span className="stat-lbl">Total Assigned Tasks</span>
+          </div>
+          <div className="workset-stat-pill completed">
+            <span className="stat-num">{completed}</span>
+            <span className="stat-lbl">Fully Completed</span>
+          </div>
+          <div className="workset-stat-pill practical">
+            <span className="stat-num">{practical}</span>
+            <span className="stat-lbl">Practical Training</span>
+          </div>
+          <div className="workset-stat-pill learned">
+            <span className="stat-num">93/100</span>
+            <span className="stat-lbl">Avg Practical Score</span>
+          </div>
+        </div>
       </section>
 
-      <section className="metric-grid">
-        <Metric icon={Layers} label="Total Assigned Tasks" value={total} />
-        <Metric icon={CheckCircle2} label="Fully Completed Tasks" value={completed} />
-        <Metric icon={BriefcaseBusiness} label="Under Practical Training" value={practical} />
-        <Metric icon={Award} label="Avg Practical Score" value="93/100" />
-      </section>
-
+      {/* Charts Grid */}
       <div className="md-chart-grid">
         <section className="md-chart-card">
           <div className="md-chart-head">
             <h3>Completion by Difficulty Level</h3>
-            <span className="badge">Live</span>
+            <span className="badge success">Live</span>
           </div>
-          <div className="md-ring-row">
-            <MdChartRing value={l1Completed} label="L1 Hard Work" />
-            <MdChartRing value={l2Completed} label="L2 Medium Work" />
-            <MdChartRing value={l3Completed} label="L3 Easy Work" />
+          <div className="md-ring-row margin-top-md">
+            <MdChartRing value={l1Completed} label="L1 Hard Work" color="#007aff" />
+            <MdChartRing value={l2Completed} label="L2 Medium Work" color="#ff9500" />
+            <MdChartRing value={l3Completed} label="L3 Easy Work" color="#34c759" />
           </div>
         </section>
 
@@ -1855,16 +1895,22 @@ function MdWorkSetOverview({ workSets }) {
             <h3>Employee Practical Completion</h3>
             <span className="badge">Role Categories</span>
           </div>
-          <div className="md-bars">
+          <div className="md-bars margin-top-md">
             {workSets.map((set) => {
-              const stats = getWorkSetStats(set.works);
+              const setWorks = set.works || [];
+              const setDone = setWorks.filter((w) => getItemStatus(w) === 'Completed').length;
+              const setTotal = setWorks.length || 1;
+              const setPercent = Math.round((setDone / setTotal) * 100);
               return (
                 <div key={set.id} className="md-bar-line">
-                  <span>{set.employeeName} ({set.name})</span>
-                  <div className="bar">
-                    <span style={{ width: `${stats.progressPercent}%` }} />
+                  <div className="md-bar-info">
+                    <span>{set.employeeName}</span>
+                    <span className="md-bar-count">({set.name})</span>
                   </div>
-                  <strong>{stats.completed}/{stats.total} ({stats.progressPercent}%)</strong>
+                  <div className="bar">
+                    <span style={{ width: `${setPercent}%`, background: setPercent === 100 ? '#34c759' : '#007aff' }} />
+                  </div>
+                  <strong>{setDone}/{setTotal} ({setPercent}%)</strong>
                 </div>
               );
             })}
@@ -1872,23 +1918,56 @@ function MdWorkSetOverview({ workSets }) {
         </section>
       </div>
 
-      <Panel title="Assigned Role Categories Overview">
-        <DataTable
-          columns={['Employee', 'Role Category', 'Assigned Date', 'Total Tasks', 'Completed', 'Progress', 'Status']}
-          rows={workSets.map((set) => {
-            const stats = getWorkSetStats(set.works);
-            return [
-              set.employeeName,
-              set.name,
-              set.assignedDate,
-              stats.total,
-              stats.completed,
-              `${stats.progressPercent}%`,
-              stats.progressPercent === 100 ? 'Completed' : 'In Training'
-            ];
-          })}
-        />
-      </Panel>
+      {/* Categories Table */}
+      <section className="panel">
+        <div className="panel-head">
+          <h3>Assigned Role Categories Overview</h3>
+          <span className="badge-pill primary">{workSets.length} Active Categories</span>
+        </div>
+        <div className="workset-table-container">
+          <table className="workset-table">
+            <thead>
+              <tr>
+                <th>Employee Name</th>
+                <th>Role Category</th>
+                <th>Assigned Date</th>
+                <th>Tasks Completed</th>
+                <th style={{ width: '180px' }}>Practical Progress</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {workSets.map((set) => {
+                const setWorks = set.works || [];
+                const setDone = setWorks.filter((w) => getItemStatus(w) === 'Completed').length;
+                const setTotal = setWorks.length || 1;
+                const setPercent = Math.round((setDone / setTotal) * 100);
+                return (
+                  <tr key={set.id} className="work-row">
+                    <td><strong>{set.employeeName}</strong> ({set.employeeId})</td>
+                    <td><span className="badge-pill secondary">{set.name}</span></td>
+                    <td>{set.assignedDate}</td>
+                    <td><strong>{setDone} / {setTotal} Tasks</strong></td>
+                    <td>
+                      <div className="emp-progress-cell">
+                        <div className="bar">
+                          <span style={{ width: `${setPercent}%`, background: setPercent === 100 ? '#34c759' : '#007aff' }} />
+                        </div>
+                        <span className="emp-progress-num">{setPercent}%</span>
+                      </div>
+                    </td>
+                    <td>
+                      <span className={`badge ${setPercent === 100 ? 'success' : ''}`}>
+                        {setPercent === 100 ? '🟢 Completed' : '🔵 In Training'}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 }
