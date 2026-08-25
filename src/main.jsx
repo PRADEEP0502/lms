@@ -312,6 +312,12 @@ function LoginPage({ onLogin }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const handleQuickSelect = (roleName) => {
+    setUsername(roleName);
+    setPassword('demo123');
+    setError('');
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     setError('');
@@ -330,7 +336,7 @@ function LoginPage({ onLogin }) {
         return;
       }
       onLogin(match);
-    }, 500);
+    }, 450);
   };
 
   return (
@@ -338,62 +344,105 @@ function LoginPage({ onLogin }) {
       <section className="login-art" aria-label="Junior Processing Mill LMS overview">
         <div className="brand-mark">
           <img src={juniorLogo} alt="Junior Processing Mill logo" />
-          Junior Processing Mill
+          <span>Junior Processing Mill</span>
+          <span className="badge-pill primary-light">Enterprise LMS 2.0</span>
         </div>
+
         <div className="login-copy">
-          <p className="eyebrow">Enterprise learning and onboarding</p>
+          <p className="eyebrow">Enterprise Learning & Onboarding Management System</p>
           <h1>Junior Processing Mill LMS Portal</h1>
-          <p>Secure role-based access for mill employee onboarding, assigned training, practical role tasks (Data Entry, Dispatch, HR, QC), assessments, and leadership reporting.</p>
+          <p>
+            Secure, role-based platform for mill employee onboarding, multi-role practical tasks (Data Entry, Dispatch, QC, HR), live screen video recordings, assessments, and executive leadership analytics.
+          </p>
+
+          <div className="login-badges">
+            <span className="login-badge"><ShieldCheck size={14} /> Role-Based Security</span>
+            <span className="login-badge"><Camera size={14} /> Screen Video Demos</span>
+            <span className="login-badge"><BarChart3 size={14} /> Executive Analytics</span>
+          </div>
         </div>
+
         <div className="login-stats">
-          <StatCard value="92%" label="Training completion" />
-          <StatCard value="Multi-Role" label="Data Entry, Dispatch, HR" />
-          <StatCard value="3" label="Authorized roles" />
+          <div className="stat-card dark-stat">
+            <strong>92%</strong>
+            <span>Training Completion</span>
+          </div>
+          <div className="stat-card dark-stat">
+            <strong>Multi-Role</strong>
+            <span>Data Entry, Dispatch, HR, QC</span>
+          </div>
+          <div className="stat-card dark-stat">
+            <strong>100%</strong>
+            <span>Audit & Verification</span>
+          </div>
         </div>
       </section>
+
       <section className="login-panel">
         <form className="login-card" onSubmit={handleSubmit}>
           <div>
             <div className="mobile-brand">
               <img src={juniorLogo} alt="Junior Processing Mill logo" /> Junior Processing Mill LMS
             </div>
-            <h2>Sign in</h2>
-            <p>Use your company credentials to continue.</p>
+            <h2>Sign in to Portal</h2>
+            <p>Enter your employee credentials to access your workspace.</p>
           </div>
+
           <label>
             Employee ID / Username
             <div className="input-wrap">
               <User size={18} />
-              <input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="employee" autoComplete="username" />
+              <input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="e.g. employee / hr / md" autoComplete="username" />
             </div>
           </label>
+
           <label>
             Password
             <div className="input-wrap">
               <Lock size={18} />
-              <input type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="demo123" autoComplete="current-password" />
+              <input type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="••••••••" autoComplete="current-password" />
               <button className="icon-button" type="button" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? 'Hide password' : 'Show password'}>
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </label>
+
           {error && (
             <div className="form-error">
               <AlertCircle size={16} />
               {error}
             </div>
           )}
-          <button className="primary-button" type="submit" disabled={loading}>
-            {loading ? 'Validating...' : 'Login'}
+
+          <button className="primary-button full-width" type="submit" disabled={loading}>
+            {loading ? 'Validating...' : 'Sign In to Workspace'}
           </button>
-          <button className="link-button" type="button">
-            Forgot password?
-          </button>
-          <div className="demo-users">
-            <span>Demo users:</span>
-            <strong>employee</strong>
-            <strong>hr</strong>
-            <strong>md</strong>
+
+          <div className="demo-role-quickselect">
+            <span>One-Click Demo Access:</span>
+            <div className="role-quick-pills">
+              <button
+                type="button"
+                className={`quick-pill ${username === 'employee' ? 'active' : ''}`}
+                onClick={() => handleQuickSelect('employee')}
+              >
+                👤 Employee
+              </button>
+              <button
+                type="button"
+                className={`quick-pill ${username === 'hr' ? 'active' : ''}`}
+                onClick={() => handleQuickSelect('hr')}
+              >
+                👩‍💼 HR Lead
+              </button>
+              <button
+                type="button"
+                className={`quick-pill ${username === 'md' ? 'active' : ''}`}
+                onClick={() => handleQuickSelect('md')}
+              >
+                👔 MD Executive
+              </button>
+            </div>
           </div>
         </form>
       </section>
