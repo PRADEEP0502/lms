@@ -775,48 +775,162 @@ function EmployeeContent(props) {
 }
 
 function EmployeeDashboard({ session, onboardingPercent, trainingItems, workSet, setActive }) {
+  const getItemStatus = (item) => {
+    if (!item) return 'Not Started';
+    if (item.stageA && item.stageB && item.stageC) return 'Completed';
+    if (item.status === 'Completed') return 'Completed';
+    if (item.stageA && (item.stageB || item.stageC)) return 'Practical';
+    if (item.status === 'Practical') return 'Practical';
+    if (item.stageA || item.status === 'Learned') return 'Learned';
+    return 'Not Started';
+  };
+
+  const works = workSet ? (workSet.works || []) : defaultWorkItems;
+  const completedCount = works.filter((w) => getItemStatus(w) === 'Completed').length;
+  const totalCount = works.length || 20;
+  const progressPercent = Math.round((completedCount / totalCount) * 100);
+
   const completedSections = Math.round((onboardingPercent / 100) * onboardingSections.length);
   const pendingAssessments = trainingItems.filter((item) => item.type === 'Assessment' && item.progress < 100);
-  const stats = getWorkSetStats(workSet ? workSet.works : []);
 
   return (
-    <div className="dashboard-simple">
-      <section className="simple-welcome">
-        <div>
-          <h2>Welcome, {session.name}</h2>
-          <p>Employee ID: {session.employeeId}</p>
-          <p>
-            {session.department} / {session.designation}
-          </p>
+    <div className="stack">
+      {/* Executive Welcome Card */}
+      <section className="executive-welcome-card">
+        <div className="executive-welcome-main">
+          <div className="workset-badge-group margin-bottom-xs">
+            <span className="badge-pill primary">Employee Portal</span>
+            <span className="badge-pill secondary">{session.department || 'Production'} Department</span>
+          </div>
+          <h2>Welcome back, {session.name}</h2>
+          <p>{session.designation || 'Process Associate'} · {session.employeeId || 'EMP-1042'} · Mill Operations</p>
+        </div>
+
+        <div className="executive-welcome-side">
+          <div className="exec-mini-stat">
+            <Award size={16} className="text-primary" />
+            <div>
+              <span className="lbl">Role Status</span>
+              <strong>Active Employee</strong>
+            </div>
+          </div>
+          <div className="exec-mini-stat">
+            <CheckCircle2 size={16} className="text-success" />
+            <div>
+              <span className="lbl">Onboarding</span>
+              <strong className="text-success">100% Certified</strong>
+            </div>
+          </div>
         </div>
       </section>
-      <div className="simple-grid">
-        <SimpleCard icon={ClipboardCheck} title="Onboarding">
-          <SimpleProgress value={onboardingPercent} />
-          <p>
-            {completedSections} of {onboardingSections.length} sections completed
-          </p>
-        </SimpleCard>
-        <SimpleCard icon={Layers} title="Assigned Role Practical Tasks">
-          <div className="workset-mini-summary">
-            <div className="workset-mini-val">
-              <strong>{stats.completed} / {stats.total}</strong>
-              <span className="badge success">{stats.progressPercent}% Completed</span>
-            </div>
-            <div className="bar" style={{ margin: '10px 0' }}>
-              <span style={{ width: `${stats.progressPercent}%` }} />
-            </div>
-            <button className="link-button" type="button" onClick={() => setActive('My Training')}>
-              Open My Training Tasks →
+
+      {/* 4 Clean Metric Cards */}
+      <div className="simple-stats-grid">
+        <article className="simple-stat-card">
+          <div className="stat-icon-box green"><ShieldCheck size={22} /></div>
+          <div className="flex-1">
+            <strong>{onboardingPercent}%</strong>
+            <span>Onboarding Compliance ({completedSections}/{onboardingSections.length} sections)</span>
+            <div className="bar margin-top-xs"><span style={{ width: `${onboardingPercent}%`, background: '#34c759' }} /></div>
+          </div>
+        </article>
+
+        <article className="simple-stat-card">
+          <div className="stat-icon-box blue"><Layers size={22} /></div>
+          <div className="flex-1">
+            <strong>{completedCount} / {totalCount} Tasks</strong>
+            <span>Assigned Role Tasks ({progressPercent}% Completed)</span>
+            <div className="bar margin-top-xs"><span style={{ width: `${progressPercent}%`, background: '#007aff' }} /></div>
+          </div>
+        </article>
+
+        <article className="simple-stat-card">
+          <div className="stat-icon-box purple"><BookOpen size={22} /></div>
+          <div className="flex-1">
+            <strong>{trainingItems.length} Courses</strong>
+            <span>Active Training Courses</span>
+            <div className="bar margin-top-xs"><span style={{ width: '80%', background: '#af52de' }} /></div>
+          </div>
+        </article>
+
+        <article className="simple-stat-card">
+          <div className="stat-icon-box orange"><NotebookTabs size={22} /></div>
+          <div className="flex-1">
+            <strong>{pendingAssessments.length} Test</strong>
+            <span>Pending Assessment</span>
+            <div className="bar margin-top-xs"><span style={{ width: '40%', background: '#ff9500' }} /></div>
+          </div>
+        </article>
+      </div>
+
+      {/* Two Column Quick Actions & Activity Grid */}
+      <div className="simple-two-column">
+        <section className="panel">
+          <div className="panel-head">
+            <h3>Assigned Role Practical Training</h3>
+            <button className="primary-button compact text-xs" type="button" onClick={() => setActive('My Training')}>
+              Open Practical Tasks →
             </button>
           </div>
-        </SimpleCard>
-        <SimpleCard icon={BookOpen} title="My Training">
-          <SimpleList items={trainingItems.slice(0, 2).map((item) => item.title)} />
-        </SimpleCard>
-        <SimpleCard icon={NotebookTabs} title="Pending Assessment">
-          <SimpleList items={pendingAssessments.length ? pendingAssessments.map((item) => item.title) : ['No pending assessments']} />
-        </SimpleCard>
+          <div className="margin-top-sm">
+            <p className="text-secondary text-sm margin-bottom-sm">
+              Role Category: <strong>{workSet ? workSet.name : 'Data Entry'}</strong> · Assigned Date: {workSet ? workSet.assignedDate : '2026-08-15'}
+            </p>
+            <div className="workset-table-container">
+              <table className="workset-table">
+                <thead>
+                  <tr>
+                    <th>Task Title</th>
+                    <th>Level</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {works.slice(0, 4).map((item) => (
+                    <tr key={item.id} className="work-row">
+                      <td><strong>{item.title}</strong></td>
+                      <td><span className={`badge-level ${item.level.toLowerCase()}`}>{item.level}</span></td>
+                      <td>
+                        <span className={`badge ${getItemStatus(item) === 'Completed' ? 'success' : ''}`}>
+                          {getItemStatus(item) === 'Completed' ? '🟢 Completed' : '🔵 In Progress'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section className="panel">
+          <div className="panel-head">
+            <h3>Recent Learning Activity</h3>
+            <span className="badge-pill secondary">Live Log</span>
+          </div>
+          <div className="margin-top-sm">
+            <ul className="simple-list">
+              <li>
+                <div className="flex-between align-center">
+                  <span>📹 Watched <strong>Compacting Card Entry</strong> Demo Video</span>
+                  <span className="text-xs text-muted">Today</span>
+                </div>
+              </li>
+              <li>
+                <div className="flex-between align-center">
+                  <span>✅ Completed <strong>Stenter Job Card Entry</strong> Task</span>
+                  <span className="text-xs text-muted">Yesterday</span>
+                </div>
+              </li>
+              <li>
+                <div className="flex-between align-center">
+                  <span>📜 <strong>100% Onboarding Certificate</strong> Awarded</span>
+                  <span className="text-xs text-muted">Aug 20</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
       </div>
     </div>
   );
