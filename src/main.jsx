@@ -1214,36 +1214,36 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
                     <span className={`badge-level ${item.level.toLowerCase()}`}>{item.level}</span>
                   </td>
                   <td className="stage-check-cell">
-                    <label className={`checkbox-wrap ${role !== 'HR' ? 'readonly' : ''}`} title={role !== 'HR' ? 'Stage marked by HR' : 'Toggle Stage A'}>
+                    <label className={`stage-toggle-switch ${item.stageA ? 'is-active' : ''} ${role !== 'HR' ? 'is-disabled' : ''}`} title={role !== 'HR' ? 'Stage A (Learned) marked by HR' : 'Toggle Stage A (Learned)'}>
                       <input
                         type="checkbox"
                         checked={item.stageA}
                         disabled={role !== 'HR'}
                         onChange={() => role === 'HR' && toggleWorkStage(workSet.id, item.id, 'stageA')}
                       />
-                      <span className={`custom-checkbox ${role !== 'HR' ? 'readonly' : ''}`}><Check size={14} /></span>
+                      <span className="stage-toggle-slider" />
                     </label>
                   </td>
                   <td className="stage-check-cell">
-                    <label className={`checkbox-wrap ${role !== 'HR' ? 'readonly' : ''}`} title={role !== 'HR' ? 'Stage marked by HR' : 'Toggle Stage B'}>
+                    <label className={`stage-toggle-switch ${item.stageB ? 'is-active' : ''} ${role !== 'HR' ? 'is-disabled' : ''}`} title={role !== 'HR' ? 'Stage B (Practical) marked by HR' : 'Toggle Stage B (Practical)'}>
                       <input
                         type="checkbox"
                         checked={item.stageB}
                         disabled={role !== 'HR'}
                         onChange={() => role === 'HR' && toggleWorkStage(workSet.id, item.id, 'stageB')}
                       />
-                      <span className={`custom-checkbox ${role !== 'HR' ? 'readonly' : ''}`}><Check size={14} /></span>
+                      <span className="stage-toggle-slider" />
                     </label>
                   </td>
                   <td className="stage-check-cell">
-                    <label className={`checkbox-wrap ${role !== 'HR' ? 'readonly' : ''}`} title={role !== 'HR' ? 'Stage marked by HR' : 'Toggle Stage C'}>
+                    <label className={`stage-toggle-switch ${item.stageC ? 'is-active' : ''} ${role !== 'HR' ? 'is-disabled' : ''}`} title={role !== 'HR' ? 'Stage C (Verified) marked by HR' : 'Toggle Stage C (Verified)'}>
                       <input
                         type="checkbox"
                         checked={item.stageC}
                         disabled={role !== 'HR'}
                         onChange={() => role === 'HR' && toggleWorkStage(workSet.id, item.id, 'stageC')}
                       />
-                      <span className={`custom-checkbox ${role !== 'HR' ? 'readonly' : ''}`}><Check size={14} /></span>
+                      <span className="stage-toggle-slider" />
                     </label>
                   </td>
                   <td className="performance-cell">
