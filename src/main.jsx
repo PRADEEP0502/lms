@@ -2150,24 +2150,223 @@ function MdDashboard({ approvalItems = [], workSets = [], setApprovalItems, show
 }
 
 function EmployeesView({ readOnly, showToast, openModal }) {
+  const [search, setSearch] = useState('');
+  const [deptFilter, setDeptFilter] = useState('ALL');
+  const [statusFilter, setStatusFilter] = useState('ALL');
+  const [selectedEmpModal, setSelectedEmpModal] = useState(null);
+
+  const filteredEmployees = employees.filter((emp) => {
+    const matchSearch = emp.name.toLowerCase().includes(search.toLowerCase()) || emp.id.toLowerCase().includes(search.toLowerCase()) || emp.role.toLowerCase().includes(search.toLowerCase());
+    const matchDept = deptFilter === 'ALL' || emp.department === deptFilter;
+    const matchStatus = statusFilter === 'ALL' || emp.status === statusFilter;
+    return matchSearch && matchDept && matchStatus;
+  });
+
   return (
     <div className="stack">
-      <section className="section-head">
-        <div>
-          <p className="eyebrow">{readOnly ? 'Company employees' : 'Employee management'}</p>
-          <h2>{readOnly ? 'Employee training statistics' : 'Manage employee learning records'}</h2>
+      {/* Header Banner */}
+      <section className="workset-header-card">
+        <div className="workset-header-top">
+          <div>
+            <div className="workset-badge-group">
+              <span className="badge-pill primary">Company Workforce Directory</span>
+              <span className="badge-pill secondary">Live Sync</span>
+            </div>
+            <h2>Employee Learning & Performance Directory</h2>
+            <p className="workset-employee-meta">
+              Directory of Junior Processing Mill employees across Production, Office, Quality, Dispatch, and HR.
+            </p>
+          </div>
+          {!readOnly && (
+            <button className="primary-button compact" onClick={() => openModal('Add Employee', 'Create a new employee profile for LMS onboarding.', ['Employee name', 'Employee ID', 'Department', 'Designation'])}>
+              <Users size={17} /> Add Employee
+            </button>
+          )}
         </div>
-        {!readOnly && (
-          <button className="primary-button compact" onClick={() => openModal('Add Employee', 'Create a new employee profile for LMS onboarding.', ['Employee name', 'Employee ID', 'Department', 'Designation'])}>
-            <Users size={17} />
-            Add employee
-          </button>
-        )}
+
+        {/* 4 Summary Stats Pills */}
+        <div className="workset-stats-grid">
+          <div className="workset-stat-pill">
+            <span className="stat-num">{employees.length}</span>
+            <span className="stat-lbl">Total Workforce</span>
+          </div>
+          <div className="workset-stat-pill completed">
+            <span className="stat-num">{employees.filter(e => e.status === 'Active').length}</span>
+            <span className="stat-lbl">Active Employees</span>
+          </div>
+          <div className="workset-stat-pill practical">
+            <span className="stat-num">{employees.filter(e => e.status === 'Grace Review').length}</span>
+            <span className="stat-lbl">Grace Review</span>
+          </div>
+          <div className="workset-stat-pill learned">
+            <span className="stat-num">84%</span>
+            <span className="stat-lbl">Avg Completion</span>
+          </div>
+        </div>
       </section>
-      <DataTable
-        columns={['Employee', 'Department', 'Designation', 'Onboarding', 'Training', 'Status']}
-        rows={employees.map((employee) => [employee.name, employee.department, employee.role, `${employee.onboarding}%`, `${employee.training}%`, employee.status])}
-      />
+
+      {/* Toolbar & Search */}
+      <div className="workset-toolbar">
+        <div className="search flex-1">
+          <Search size={17} />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search employee name, ID, designation..." />
+        </div>
+        <div className="filter-group">
+          <div className="select-wrap">
+            <Filter size={16} />
+            <select value={deptFilter} onChange={(e) => setDeptFilter(e.target.value)}>
+              <option value="ALL">All Departments</option>
+              <option value="Production">Production</option>
+              <option value="Office">Office</option>
+              <option value="Quality">Quality</option>
+              <option value="Dispatch">Dispatch</option>
+            </select>
+          </div>
+          <div className="select-wrap">
+            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+              <option value="ALL">All Statuses</option>
+              <option value="Active">Active</option>
+              <option value="Grace Review">Grace Review</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Ultra-Professional Employee Table */}
+      <div className="workset-table-container">
+        <table className="workset-table">
+          <thead>
+            <tr>
+              <th>Employee Profile</th>
+              <th>Department</th>
+              <th>Designation</th>
+              <th style={{ width: '160px' }}>Onboarding</th>
+              <th style={{ width: '160px' }}>Training & Tasks</th>
+              <th style={{ width: '140px' }}>Status</th>
+              <th style={{ width: '110px' }}>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredEmployees.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="empty-table-cell">No matching employees found.</td>
+              </tr>
+            ) : (
+              filteredEmployees.map((emp) => (
+                <tr key={emp.id} className="work-row">
+                  <td>
+                    <div className="emp-table-profile">
+                      <div className="emp-avatar-circle">{emp.name.split(' ').map(p => p[0]).join('')}</div>
+                      <div>
+                        <strong className="emp-table-name">{emp.name}</strong>
+                        <span className="emp-table-id">{emp.id}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span className="badge-pill secondary">{emp.department}</span>
+                  </td>
+                  <td>
+                    <span className="emp-designation-text">{emp.role}</span>
+                  </td>
+                  <td>
+                    <div className="emp-progress-cell">
+                      <div className="bar">
+                        <span style={{ width: `${emp.onboarding}%`, background: emp.onboarding === 100 ? '#34c759' : '#007aff' }} />
+                      </div>
+                      <span className="emp-progress-num">{emp.onboarding}%</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="emp-progress-cell">
+                      <div className="bar">
+                        <span style={{ width: `${emp.training}%`, background: emp.training >= 80 ? '#34c759' : '#ff9500' }} />
+                      </div>
+                      <span className="emp-progress-num">{emp.training}%</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span className={`badge ${emp.status === 'Active' ? 'success' : ''}`}>
+                      {emp.status === 'Active' ? '🟢 Active' : '⚠️ Grace Review'}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      className="secondary-button compact text-xs"
+                      onClick={() => setSelectedEmpModal(emp)}
+                    >
+                      <Eye size={13} /> View
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Employee Detail Modal */}
+      {selectedEmpModal && (
+        <EmployeeDetailModal
+          employee={selectedEmpModal}
+          onClose={() => setSelectedEmpModal(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+// Modal Component for Viewing Employee Details
+function EmployeeDetailModal({ employee, onClose }) {
+  return (
+    <div className="modal-backdrop" role="presentation">
+      <div className="video-modal">
+        <div className="video-modal-head">
+          <div>
+            <div className="workset-badge-group margin-bottom-xs">
+              <span className="badge-pill primary">{employee.department} Department</span>
+              <span className={`badge ${employee.status === 'Active' ? 'success' : ''}`}>{employee.status}</span>
+            </div>
+            <h2>{employee.name}</h2>
+            <p>{employee.id} · {employee.role}</p>
+          </div>
+          <button className="icon-button" type="button" onClick={onClose}>X</button>
+        </div>
+
+        <div className="employee-detail-modal-body">
+          <div className="emp-detail-stats-grid">
+            <div className="emp-detail-card">
+              <span className="lbl">Onboarding Compliance</span>
+              <strong>{employee.onboarding}%</strong>
+              <div className="bar margin-top-xs"><span style={{ width: `${employee.onboarding}%` }} /></div>
+            </div>
+            <div className="emp-detail-card">
+              <span className="lbl">Role Practical Training</span>
+              <strong>{employee.training}%</strong>
+              <div className="bar margin-top-xs"><span style={{ width: `${employee.training}%`, background: '#34c759' }} /></div>
+            </div>
+            <div className="emp-detail-card">
+              <span className="lbl">Assessment Readiness</span>
+              <strong>{employee.assessment}%</strong>
+              <div className="bar margin-top-xs"><span style={{ width: `${employee.assessment}%`, background: '#af52de' }} /></div>
+            </div>
+          </div>
+
+          <div className="margin-top-md">
+            <h4>Assigned Training Status</h4>
+            <ul className="simple-list">
+              <li>Workplace Induction Policy Acknowledgement — <strong>Completed (100%)</strong></li>
+              <li>Production Safety Essentials — <strong>In Progress ({employee.training}%)</strong></li>
+              <li>Practical Role Task Execution — <strong>Verified by HR</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="modal-actions margin-top-md">
+          <button className="primary-button compact" type="button" onClick={onClose}>Close Profile</button>
+        </div>
+      </div>
     </div>
   );
 }
