@@ -1999,61 +1999,163 @@ function MdContent(props) {
   if (active === 'Approvals') return <ApprovalsView approvalItems={approvalItems} setApprovalItems={setApprovalItems} showToast={showToast} />;
   if (active === 'Notifications') return <NotificationsView />;
   if (active === 'Profile') return <ProfileView session={session} />;
-  return <MdDashboard approvalItems={approvalItems} workSets={workSets} />;
+  return <MdDashboard approvalItems={approvalItems} workSets={workSets} setApprovalItems={setApprovalItems} showToast={showToast} generatedReports={generatedReports} setGeneratedReports={setGeneratedReports} />;
 }
 
-function MdDashboard({ approvalItems, workSets }) {
+function MdDashboard({ approvalItems = [], workSets = [], setApprovalItems, showToast, generatedReports = [], setGeneratedReports }) {
   const pendingApprovals = approvalItems.filter((item) => item.status !== 'Approved').length;
   const allWorks = workSets.flatMap((s) => s.works || []);
-  const completedRate = Math.round((allWorks.filter((w) => w.status === 'Completed').length / (allWorks.length || 1)) * 100);
+  const completedWorksCount = allWorks.filter((w) => w.status === 'Completed').length;
+  const totalWorksCount = allWorks.length || 1;
+  const completedRate = Math.round((completedWorksCount / totalWorksCount) * 100);
+
+  const approve = (id) => {
+    if (setApprovalItems) {
+      setApprovalItems(approvalItems.map((item) => (item.id === id ? { ...item, status: 'Approved' } : item)));
+    }
+    if (showToast) showToast('Decision approved');
+  };
 
   return (
-    <div className="dashboard-simple">
-      <section className="simple-welcome">
-        <div>
-          <h2>MD Dashboard</h2>
-          <p>Management-focused LMS and Role Practical Training summary for Junior Processing Mill.</p>
+    <div className="stack">
+      {/* Executive Grand Welcome Banner */}
+      <section className="md-hero-banner">
+        <div className="md-hero-content">
+          <div className="md-hero-badge-group">
+            <span className="badge-pill primary-light">Managing Director Executive Hub</span>
+            <span className="badge-pill success-light">Live Mill Control</span>
+          </div>
+          <h2>Welcome, Dev Menon</h2>
+          <p>
+            Real-time workforce readiness, practical training execution across Data Entry, Dispatch, QC, and corporate approval decisions for Junior Processing Mill.
+          </p>
+          <div className="md-hero-kpis">
+            <span className="kpi-pill"><Award size={14} /> Overall Readiness: 86%</span>
+            <span className="kpi-pill"><Target size={14} /> Active Roles: 5 Departments</span>
+            <span className="kpi-pill"><ShieldCheck size={14} /> Security Compliance: 100%</span>
+          </div>
         </div>
       </section>
-      <div className="simple-stats">
-        <Metric icon={Users} label="Total employees" value="124" />
-        <Metric icon={Layers} label="Role Tasks Completion" value={`${completedRate}%`} />
-        <Metric icon={BookOpen} label="Training completion" value="76%" />
-        <Metric icon={ShieldCheck} label="Pending approvals" value={pendingApprovals} />
+
+      {/* 4 Grand Metric Cards */}
+      <div className="md-grand-metrics">
+        <article className="md-metric-card">
+          <div className="metric-header">
+            <div className="metric-icon-box blue"><Users size={24} /></div>
+            <span className="trend-badge positive">+12 this month</span>
+          </div>
+          <div className="metric-body">
+            <strong>124</strong>
+            <span>Total Workforce</span>
+          </div>
+          <p className="metric-foot">Active across 5 mill departments</p>
+        </article>
+
+        <article className="md-metric-card">
+          <div className="metric-header">
+            <div className="metric-icon-box green"><Layers size={24} /></div>
+            <span className="trend-badge positive">{completedWorksCount}/{totalWorksCount} Done</span>
+          </div>
+          <div className="metric-body">
+            <strong>{completedRate}%</strong>
+            <span>Role Practical Completion</span>
+          </div>
+          <p className="metric-foot">Data Entry, Dispatch, HR, QC</p>
+        </article>
+
+        <article className="md-metric-card">
+          <div className="metric-header">
+            <div className="metric-icon-box purple"><BookOpen size={24} /></div>
+            <span className="trend-badge neutral">18 Courses</span>
+          </div>
+          <div className="metric-body">
+            <strong>76%</strong>
+            <span>Training & Assessment</span>
+          </div>
+          <p className="metric-foot">7 open assessments</p>
+        </article>
+
+        <article className="md-metric-card">
+          <div className="metric-header">
+            <div className="metric-icon-box orange"><ShieldCheck size={24} /></div>
+            <span className={`trend-badge ${pendingApprovals > 0 ? 'warning' : 'positive'}`}>
+              {pendingApprovals} Pending
+            </span>
+          </div>
+          <div className="metric-body">
+            <strong>{pendingApprovals}</strong>
+            <span>Pending Decisions</span>
+          </div>
+          <p className="metric-foot">Budget & Reports Review</p>
+        </article>
       </div>
+
+      {/* Charts Grid */}
       <div className="md-chart-grid">
         <section className="md-chart-card">
           <div className="md-chart-head">
-            <h3>Company Progress</h3>
-            <span className="badge">Live</span>
+            <div>
+              <h3>Practical Readiness Rings</h3>
+              <p>Live progress tracking across key learning tracks</p>
+            </div>
+            <span className="badge success">Live Sync</span>
           </div>
-          <div className="md-ring-row">
+          <div className="md-ring-row margin-top-md">
             <MdChartRing value={82} label="Onboarding" />
             <MdChartRing value={completedRate} label="Role Tasks" />
             <MdChartRing value={76} label="Training" />
+            <MdChartRing value={90} label="Dispatch" />
           </div>
         </section>
+
         <section className="md-chart-card">
           <div className="md-chart-head">
-            <h3>Department Progress</h3>
-            <span className="badge">This month</span>
+            <div>
+              <h3>Department Execution Breakdown</h3>
+              <p>Practical completion percentage by department</p>
+            </div>
+            <span className="badge">This Month</span>
           </div>
-          <MdBarChart />
+          <div className="margin-top-md">
+            <MdBarChart />
+          </div>
         </section>
       </div>
+
+      {/* Three Column Action Cards */}
       <div className="simple-three-column">
-        <SimpleCard icon={Bell} title="Recent Important Updates">
-          <SimpleList items={['Data Entry & Dispatch tasks 80% completed', 'Monthly learning report is ready', '7 assessments currently open']} />
+        <SimpleCard icon={Bell} title="Important Mill Updates">
+          <SimpleList items={[
+            'Data Entry & Dispatch tasks 80% completed by employees',
+            'Monthly executive learning report is generated & ready',
+            '4 grace-period onboarding reviews assigned to HR'
+          ]} />
         </SimpleCard>
-        <SimpleCard icon={FileText} title="Quick Reports">
-          <SimpleList items={['Role Practical Tasks Summary', 'Onboarding Summary', 'Assessment Status']} />
-        </SimpleCard>
-        <SimpleCard icon={ShieldCheck} title="Pending Decisions">
+
+        <SimpleCard icon={ShieldCheck} title="Pending Approvals">
           <div className="decision-list">
-            <StatusLine text="Monthly learning report" status="Ready" />
-            <StatusLine text="Practical Task evaluations" status="Review" />
-            <StatusLine text="Training budget note" status="Pending" />
+            {approvalItems.map((item) => (
+              <div key={item.id} className="approval-row-item">
+                <div>
+                  <strong>{item.text}</strong>
+                  <span className={`badge ${item.status === 'Approved' ? 'success' : ''}`}>{item.status}</span>
+                </div>
+                {item.status !== 'Approved' && (
+                  <button className="primary-button compact" type="button" onClick={() => approve(item.id)}>
+                    Approve
+                  </button>
+                )}
+              </div>
+            ))}
           </div>
+        </SimpleCard>
+
+        <SimpleCard icon={FileText} title="Executive Decision Reports">
+          <SimpleList items={[
+            'Role Tasks Practical Summary',
+            'Onboarding Grace-Period Audit',
+            'Departmental Training Health Index'
+          ]} />
         </SimpleCard>
       </div>
     </div>
