@@ -850,11 +850,11 @@ function EmployeeDashboard({ session, onboardingPercent, trainingItems, workSet,
         </article>
 
         <article className="simple-stat-card">
-          <div className="stat-icon-box purple"><BookOpen size={22} /></div>
+          <div className="stat-icon-box purple"><Award size={22} /></div>
           <div className="flex-1">
-            <strong>{trainingItems.length} Courses</strong>
-            <span>Active Training Courses</span>
-            <div className="bar margin-top-xs"><span style={{ width: '80%', background: '#af52de' }} /></div>
+            <strong>92 / 100</strong>
+            <span>Practical Performance Score</span>
+            <div className="bar margin-top-xs"><span style={{ width: '92%', background: '#af52de' }} /></div>
           </div>
         </article>
 
@@ -2650,7 +2650,7 @@ function TrainingView({ role, session, showToast, trainingItems = trainings, set
           onClick={() => setActiveTab('MATERIALS')}
         >
           <BookOpen size={17} />
-          <span>Videos & Course Materials</span>
+          <span>Training Videos & Demos</span>
         </button>
       </div>
 
@@ -2685,7 +2685,7 @@ function TrainingView({ role, session, showToast, trainingItems = trainings, set
           <section className="section-head">
             <div>
               <p className="eyebrow">{isHr ? 'Training administration' : 'Assigned learning'}</p>
-              <h2>{isHr ? 'Training videos and materials' : 'Videos & Course Materials'}</h2>
+              <h2>{isHr ? 'Training videos and materials' : 'Training Videos & Demos'}</h2>
               <p>{isHr ? 'Upload learning materials, schedule training, and assign employees.' : 'General learning videos and reference materials assigned to you.'}</p>
             </div>
             {isHr && (
