@@ -184,35 +184,35 @@ const onboardingSections = [
 
 // Initial 20 Work Items for Data Entry Role
 const defaultWorkItems = [
-  { id: 'W-01', title: 'Compacting Card Entry', level: 'L1', description: 'Hard Work — Compacting department daily card entries & log verification', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Compacting Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 92, performanceStatus: 'Excellent', hrRemarks: 'Accurate entry and timely log submission.', hrApproved: true },
-  { id: 'W-02', title: 'Stenter Job Card Entry', level: 'L1', description: 'Hard Work — Stenter machine job card parameters logging', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Stenter Job Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 88, performanceStatus: 'Good', hrRemarks: 'Verified against machine output logs.', hrApproved: true },
-  { id: 'W-03', title: 'Stenter Batch Card Entry', level: 'L2', description: 'Medium Work — Batch identification and batch card updates', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Stenter Batch Card Entry Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 85, performanceStatus: 'Satisfactory', hrRemarks: 'Under 4-day practical observation.', hrApproved: false },
-  { id: 'W-04', title: 'LRN Lab Card Entry', level: 'L2', description: 'Medium Work — Lab research note card test value entry', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'LRN Lab Card Entry Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 90, performanceStatus: 'Good', hrRemarks: 'Well documented lab entries.', hrApproved: false },
-  { id: 'W-05', title: 'LDN Lab Card Entry', level: 'L2', description: 'Medium Work — Dyeing note lab card entry and verification', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'LDN Lab Card Entry Demo', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
-  { id: 'W-06', title: 'LRN RC Card Entry', level: 'L2', description: 'Medium Work — Lab shade recipe card computer log', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'LRN RC Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 94, performanceStatus: 'Excellent', hrRemarks: 'Verified by Lab Incharge.', hrApproved: true },
-  { id: 'W-07', title: 'LDN RC Card Entry', level: 'L2', description: 'Medium Work — Dyeing lab RC card logging', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'LDN RC Card Entry Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 82, performanceStatus: 'Satisfactory', hrRemarks: 'Good progress.', hrApproved: false },
-  { id: 'W-08', title: 'Lab RL', level: 'L3', description: 'Easy Work — Re-leveling lab test register entry', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Lab RL Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 95, performanceStatus: 'Excellent', hrRemarks: 'Flawless execution.', hrApproved: true },
-  { id: 'W-09', title: 'Book Preparation', level: 'L3', description: 'Easy Work — Daily mill logbook index & binding prep', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Book Preparation Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 90, performanceStatus: 'Good', hrRemarks: 'Proper formatting.', hrApproved: true },
-  { id: 'W-10', title: 'Format Making', level: 'L2', description: 'Medium Work — Standard data entry template formatting', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Format Making Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
-  { id: 'W-11', title: 'Petrol Statement Preparation', level: 'L1', description: 'Hard Work — Fuel consumption logs and statement cross-verification', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Petrol Statement Demo', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
-  { id: 'W-12', title: 'Dryer Entry', level: 'L1', description: 'Hard Work — Thermal dryer operation card entry', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Dryer Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 89, performanceStatus: 'Good', hrRemarks: 'Good consistency.', hrApproved: true },
-  { id: 'W-13', title: 'QAD Entry', level: 'L2', description: 'Medium Work — Quality Assurance Department audit log', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'QAD Entry Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 87, performanceStatus: 'Satisfactory', hrRemarks: '', hrApproved: false },
-  { id: 'W-14', title: 'Daily Movement Register Checking', level: 'L3', description: 'Easy Work — Gate movement & material transit audit', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Daily Movement Register Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 98, performanceStatus: 'Excellent', hrRemarks: 'High accuracy.', hrApproved: true },
-  { id: 'W-15', title: 'Transport Report', level: 'L1', description: 'Hard Work — Dispatch vehicle log & transport invoice tallying', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Transport Report Demo', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
-  { id: 'W-16', title: 'Contract Wages Manual Production Report', level: 'L1', description: 'Hard Work — Contract labor production tallying', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Contract Wages Report Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 91, performanceStatus: 'Good', hrRemarks: 'Timely calculation.', hrApproved: true },
-  { id: 'W-17', title: 'Stationary Follow-ups (PO, GRN, ISSUE, BMS)', level: 'L1', description: 'Hard Work — Store PO, GRN, Issue slips and BMS tracking', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Stationary Follow-ups Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 96, performanceStatus: 'Excellent', hrRemarks: 'Comprehensive tracking.', hrApproved: true },
-  { id: 'W-18', title: 'TDM Follow-ups', level: 'L3', description: 'Easy Work — Technical Data Management task follow-up', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'TDM Follow-ups Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 90, performanceStatus: 'Good', hrRemarks: '', hrApproved: true },
-  { id: 'W-19', title: 'ABC Chart Follow-ups', level: 'L3', description: 'Easy Work — Inventory ABC classification updating', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'ABC Chart Follow-ups Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 93, performanceStatus: 'Excellent', hrRemarks: '', hrApproved: true },
-  { id: 'W-20', title: 'Production Card Upload to OD', level: 'L3', description: 'Easy Work — OD drive upload of daily production scans', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Production Card Upload Demo', stageA: false, stageB: false, stageC: false, status: 'Not Started', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false }
+  { id: 'W-01', title: 'Compacting Card Entry', level: 'L1', description: 'Easy Work — Compacting department daily card entries & log verification', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Compacting Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 92, performanceStatus: 'Excellent', hrRemarks: 'Accurate entry and timely log submission.', hrApproved: true },
+  { id: 'W-02', title: 'Stenter Job Card Entry', level: 'L1', description: 'Easy Work — Stenter machine job card parameters logging', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Stenter Job Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 88, performanceStatus: 'Good', hrRemarks: 'Verified against machine output logs.', hrApproved: true },
+  { id: 'W-03', title: 'Stenter Batch Card Entry', level: 'L2', description: 'Moderate Work — Batch identification and batch card updates', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Stenter Batch Card Entry Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 85, performanceStatus: 'Satisfactory', hrRemarks: 'Under 4-day practical observation.', hrApproved: false },
+  { id: 'W-04', title: 'LRN Lab Card Entry', level: 'L2', description: 'Moderate Work — Lab research note card test value entry', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'LRN Lab Card Entry Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 90, performanceStatus: 'Good', hrRemarks: 'Well documented lab entries.', hrApproved: false },
+  { id: 'W-05', title: 'LDN Lab Card Entry', level: 'L2', description: 'Moderate Work — Dyeing note lab card entry and verification', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'LDN Lab Card Entry Demo', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
+  { id: 'W-06', title: 'LRN RC Card Entry', level: 'L2', description: 'Moderate Work — Lab shade recipe card computer log', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'LRN RC Card Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 94, performanceStatus: 'Excellent', hrRemarks: 'Verified by Lab Incharge.', hrApproved: true },
+  { id: 'W-07', title: 'LDN RC Card Entry', level: 'L2', description: 'Moderate Work — Dyeing lab RC card logging', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'LDN RC Card Entry Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 82, performanceStatus: 'Satisfactory', hrRemarks: 'Good progress.', hrApproved: false },
+  { id: 'W-08', title: 'Lab RL', level: 'L3', description: 'Challenging Work — Re-leveling lab test register entry', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Lab RL Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 95, performanceStatus: 'Excellent', hrRemarks: 'Flawless execution.', hrApproved: true },
+  { id: 'W-09', title: 'Book Preparation', level: 'L3', description: 'Challenging Work — Daily mill logbook index & binding prep', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Book Preparation Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 90, performanceStatus: 'Good', hrRemarks: 'Proper formatting.', hrApproved: true },
+  { id: 'W-10', title: 'Format Making', level: 'L2', description: 'Moderate Work — Standard data entry template formatting', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Format Making Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
+  { id: 'W-11', title: 'Petrol Statement Preparation', level: 'L1', description: 'Easy Work — Fuel consumption logs and statement cross-verification', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Petrol Statement Demo', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
+  { id: 'W-12', title: 'Dryer Entry', level: 'L1', description: 'Easy Work — Thermal dryer operation card entry', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Dryer Entry Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 89, performanceStatus: 'Good', hrRemarks: 'Good consistency.', hrApproved: true },
+  { id: 'W-13', title: 'QAD Entry', level: 'L2', description: 'Moderate Work — Quality Assurance Department audit log', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'QAD Entry Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 87, performanceStatus: 'Satisfactory', hrRemarks: '', hrApproved: false },
+  { id: 'W-14', title: 'Daily Movement Register Checking', level: 'L3', description: 'Challenging Work — Gate movement & material transit audit', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Daily Movement Register Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 98, performanceStatus: 'Excellent', hrRemarks: 'High accuracy.', hrApproved: true },
+  { id: 'W-15', title: 'Transport Report', level: 'L1', description: 'Easy Work — Dispatch vehicle log & transport invoice tallying', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Transport Report Demo', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
+  { id: 'W-16', title: 'Contract Wages Manual Production Report', level: 'L1', description: 'Easy Work — Contract labor production tallying', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Contract Wages Report Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 91, performanceStatus: 'Good', hrRemarks: 'Timely calculation.', hrApproved: true },
+  { id: 'W-17', title: 'Stationary Follow-ups (PO, GRN, ISSUE, BMS)', level: 'L1', description: 'Easy Work — Store PO, GRN, Issue slips and BMS tracking', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Stationary Follow-ups Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 96, performanceStatus: 'Excellent', hrRemarks: 'Comprehensive tracking.', hrApproved: true },
+  { id: 'W-18', title: 'TDM Follow-ups', level: 'L3', description: 'Challenging Work — Technical Data Management task follow-up', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'TDM Follow-ups Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 90, performanceStatus: 'Good', hrRemarks: '', hrApproved: true },
+  { id: 'W-19', title: 'ABC Chart Follow-ups', level: 'L3', description: 'Challenging Work — Inventory ABC classification updating', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'ABC Chart Follow-ups Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 93, performanceStatus: 'Excellent', hrRemarks: '', hrApproved: true },
+  { id: 'W-20', title: 'Production Card Upload to OD', level: 'L3', description: 'Challenging Work — OD drive upload of daily production scans', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Production Card Upload Demo', stageA: false, stageB: false, stageC: false, status: 'Not Started', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false }
 ];
 
 // Initial Work Items for Dispatch Role
 const dispatchWorkItems = [
-  { id: 'W-01', title: 'Dispatch Vehicle Log Verification', level: 'L1', description: 'Hard Work — Outgoing truck logs, driver trip sheets & transport invoices audit', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Dispatch Vehicle Log Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 95, performanceStatus: 'Excellent', hrRemarks: 'Accurate trip sheet verification.', hrApproved: true },
-  { id: 'W-02', title: 'Transport Freight Invoice Tallying', level: 'L1', description: 'Hard Work — Cross-checking agency freight invoices with weighbridge slips', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Freight Invoice Tally Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 88, performanceStatus: 'Good', hrRemarks: 'Under observation.', hrApproved: false },
-  { id: 'W-03', title: 'Outward Delivery Challan Entry', level: 'L2', description: 'Medium Work — Logging outward delivery challans, PO numbers & gate passes', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Delivery Challan Demo', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
-  { id: 'W-04', title: 'Loading Inspection & Tare Weight Audit', level: 'L2', description: 'Medium Work — Gross vs tare weight inspection before vehicle exit', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Weight Audit Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 92, performanceStatus: 'Excellent', hrRemarks: '', hrApproved: true },
-  { id: 'W-05', title: 'Daily Gate Movement Register Audit', level: 'L3', description: 'Easy Work — Verifying daily gate inward & outward vehicle entry registers', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Gate Register Audit Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 96, performanceStatus: 'Excellent', hrRemarks: '', hrApproved: true }
+  { id: 'W-01', title: 'Dispatch Vehicle Log Verification', level: 'L1', description: 'Easy Work — Outgoing truck logs, driver trip sheets & transport invoices audit', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Dispatch Vehicle Log Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 95, performanceStatus: 'Excellent', hrRemarks: 'Accurate trip sheet verification.', hrApproved: true },
+  { id: 'W-02', title: 'Transport Freight Invoice Tallying', level: 'L1', description: 'Easy Work — Cross-checking agency freight invoices with weighbridge slips', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Freight Invoice Tally Demo', stageA: true, stageB: true, stageC: false, status: 'Practical', score: 88, performanceStatus: 'Good', hrRemarks: 'Under observation.', hrApproved: false },
+  { id: 'W-03', title: 'Outward Delivery Challan Entry', level: 'L2', description: 'Moderate Work — Logging outward delivery challans, PO numbers & gate passes', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Delivery Challan Demo', stageA: true, stageB: false, stageC: false, status: 'Learned', score: null, performanceStatus: 'Pending', hrRemarks: '', hrApproved: false },
+  { id: 'W-04', title: 'Loading Inspection & Tare Weight Audit', level: 'L2', description: 'Moderate Work — Gross vs tare weight inspection before vehicle exit', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Weight Audit Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 92, performanceStatus: 'Excellent', hrRemarks: '', hrApproved: true },
+  { id: 'W-05', title: 'Daily Gate Movement Register Audit', level: 'L3', description: 'Challenging Work — Verifying daily gate inward & outward vehicle entry registers', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', videoTitle: 'Gate Register Audit Demo', stageA: true, stageB: true, stageC: true, status: 'Completed', score: 96, performanceStatus: 'Excellent', hrApproved: true }
 ];
 
 const initialWorkSets = [
@@ -1003,13 +1003,13 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
               <h4>Task Difficulty Levels</h4>
               <ul className="help-level-list">
                 <li>
-                  <span className="badge-level l1">L1 — Hard Work</span> Complex multi-variable mill tasks (Compacting, Stenter, Vehicle Logs).
+                  <span className="badge-level l1">L1 — Easy</span> Basic daily entries & log verification tasks.
                 </li>
                 <li>
-                  <span className="badge-level l2">L2 — Medium Work</span> Standard lab cards, delivery challans & format logging.
+                  <span className="badge-level l2">L2 — Moderate</span> Standard lab cards, delivery challans & format logging.
                 </li>
                 <li>
-                  <span className="badge-level l3">L3 — Easy Work</span> Routine register audits & follow-ups (Lab RL, Gate Movement).
+                  <span className="badge-level l3">L3 — Challenging</span> Advanced multi-variable tasks, gate movement & binding prep.
                 </li>
               </ul>
             </div>
@@ -1028,9 +1028,9 @@ function DataEntryWorkSetView({ workSet, role, toggleWorkStage, hrUpdatePerforma
             <Filter size={16} />
             <select value={levelFilter} onChange={(e) => setLevelFilter(e.target.value)}>
               <option value="ALL">All Levels</option>
-              <option value="L1">L1 — Hard Work</option>
-              <option value="L2">L2 — Medium Work</option>
-              <option value="L3">L3 — Easy Work</option>
+              <option value="L1">L1 — Easy</option>
+              <option value="L2">L2 — Moderate</option>
+              <option value="L3">L3 — Challenging</option>
             </select>
           </div>
           <div className="select-wrap">
@@ -1689,9 +1689,9 @@ function HrAddWorkItemModal({ workSet, onClose, onAdd }) {
           <label>
             Difficulty Level
             <select value={level} onChange={(e) => setLevel(e.target.value)} className="input-wrap select-input">
-              <option value="L1">L1 — Hard Work</option>
-              <option value="L2">L2 — Medium Work</option>
-              <option value="L3">L3 — Easy Work</option>
+              <option value="L1">L1 — Easy</option>
+              <option value="L2">L2 — Moderate</option>
+              <option value="L3">L3 — Challenging</option>
             </select>
           </label>
           <label>
@@ -1884,9 +1884,9 @@ function MdWorkSetOverview({ workSets = [] }) {
             <span className="badge success">Live</span>
           </div>
           <div className="md-ring-row margin-top-md">
-            <MdChartRing value={l1Completed} label="L1 Hard Work" color="#007aff" />
-            <MdChartRing value={l2Completed} label="L2 Medium Work" color="#ff9500" />
-            <MdChartRing value={l3Completed} label="L3 Easy Work" color="#34c759" />
+            <MdChartRing value={l1Completed} label="L1 Easy" color="#34c759" />
+            <MdChartRing value={l2Completed} label="L2 Moderate" color="#007aff" />
+            <MdChartRing value={l3Completed} label="L3 Challenging" color="#d9381e" />
           </div>
         </section>
 

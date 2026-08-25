@@ -1858,21 +1858,21 @@ tr:last-child td {
 }
 
 .badge-level.l1 {
-  background: #ffebe9;
-  color: #d9381e;
-  border: 1px solid rgba(217, 56, 30, 0.2);
+  background: #eaf8ee;
+  color: #248a3d;
+  border: 1px solid rgba(36, 138, 61, 0.2);
 }
 
 .badge-level.l2 {
-  background: #fff3e0;
-  color: #e65100;
-  border: 1px solid rgba(230, 81, 0, 0.2);
+  background: #eef6ff;
+  color: #007aff;
+  border: 1px solid rgba(0, 122, 255, 0.2);
 }
 
 .badge-level.l3 {
-  background: #e8f5e9;
-  color: #2e7d32;
-  border: 1px solid rgba(46, 125, 50, 0.2);
+  background: #ffebe9;
+  color: #d9381e;
+  border: 1px solid rgba(217, 56, 30, 0.2);
 }
 
 /* Toolbar & Filters */
