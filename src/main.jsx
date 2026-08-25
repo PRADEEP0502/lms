@@ -2018,15 +2018,32 @@ function MdDashboard({ approvalItems = [], workSets = [], setApprovalItems, show
 
   return (
     <div className="stack">
-      {/* Clean & Simple Executive Welcome Banner */}
-      <section className="simple-welcome-card">
-        <div className="welcome-content">
-          <div className="badge-group margin-bottom-xs">
-            <span className="badge primary">Executive Portal</span>
-            <span className="badge success">Live Sync</span>
+      {/* Executive Light Welcome Banner */}
+      <section className="executive-welcome-card">
+        <div className="executive-welcome-main">
+          <div className="workset-badge-group margin-bottom-xs">
+            <span className="badge-pill primary">Executive Portal</span>
+            <span className="badge-pill success">Live Sync</span>
           </div>
-          <h2>Welcome, Dev Menon</h2>
-          <p>Management-focused LMS and Practical Role Training summary for Junior Processing Mill.</p>
+          <h2>Welcome back, Dev Menon</h2>
+          <p>Management-focused LMS and practical role training summary for Junior Processing Mill.</p>
+        </div>
+
+        <div className="executive-welcome-side">
+          <div className="exec-mini-stat">
+            <CalendarDays size={16} className="text-primary" />
+            <div>
+              <span className="lbl">Today</span>
+              <strong>Aug 25, 2026</strong>
+            </div>
+          </div>
+          <div className="exec-mini-stat">
+            <Award size={16} className="text-success" />
+            <div>
+              <span className="lbl">Overall Readiness</span>
+              <strong className="text-success">86% Optimal</strong>
+            </div>
+          </div>
         </div>
       </section>
 
