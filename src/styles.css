@@ -2955,4 +2955,43 @@ tr:last-child td {
   color: var(--secondary);
 }
 
+.approval-row-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.approval-row-item:last-child {
+  border-bottom: 0;
+}
+
+.approval-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.approval-meta strong {
+  font-size: 0.86rem;
+  font-weight: 650;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+.md-bar-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 120px;
+}
+
+.md-bar-count {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
 

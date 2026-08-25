@@ -2070,12 +2070,12 @@ function MdDashboard({ approvalItems = [], workSets = [], setApprovalItems, show
         <section className="md-chart-card">
           <div className="md-chart-head">
             <h3>Company Progress</h3>
-            <span className="badge success">Live</span>
+            <span className="badge success">Live Sync</span>
           </div>
           <div className="md-ring-row margin-top-md">
-            <MdChartRing value={82} label="Onboarding" />
-            <MdChartRing value={completedRate} label="Role Tasks" />
-            <MdChartRing value={76} label="Training" />
+            <MdChartRing value={82} label="Onboarding" color="#007aff" />
+            <MdChartRing value={completedRate} label="Role Tasks" color="#34c759" />
+            <MdChartRing value={76} label="Training" color="#af52de" />
           </div>
         </section>
 
@@ -2095,7 +2095,7 @@ function MdDashboard({ approvalItems = [], workSets = [], setApprovalItems, show
         <SimpleCard icon={Bell} title="Recent Important Updates">
           <SimpleList items={[
             'Data Entry & Dispatch tasks 80% completed by employees',
-            'Monthly learning report is ready for review',
+            'Monthly learning report is ready for executive review',
             '7 assessments currently open across departments'
           ]} />
         </SimpleCard>
@@ -2104,9 +2104,11 @@ function MdDashboard({ approvalItems = [], workSets = [], setApprovalItems, show
           <div className="decision-list">
             {approvalItems.map((item) => (
               <div key={item.id} className="approval-row-item">
-                <div>
+                <div className="approval-meta">
                   <strong>{item.text}</strong>
-                  <span className={`badge ${item.status === 'Approved' ? 'success' : ''}`}>{item.status}</span>
+                  <span className={`badge ${item.status === 'Approved' ? 'success' : ''}`}>
+                    {item.status === 'Approved' ? '✓ Approved' : item.status}
+                  </span>
                 </div>
                 {item.status !== 'Approved' && (
                   <button className="primary-button compact" type="button" onClick={() => approve(item.id)}>
@@ -2535,12 +2537,13 @@ function SimpleList({ items }) {
   );
 }
 
-function MdChartRing({ value, label }) {
-  const style = { background: `conic-gradient(var(--primary) ${value * 3.6}deg, #ececf1 0deg)` };
+function MdChartRing({ value, label, color = 'var(--primary)' }) {
+  const safeValue = value !== undefined && value !== null ? Math.min(100, Math.max(0, value)) : 0;
+  const style = { background: `conic-gradient(${color} ${safeValue * 3.6}deg, #ececf1 0deg)` };
   return (
     <div className="md-ring" style={style}>
       <div>
-        <strong>{value}%</strong>
+        <strong>{safeValue}%</strong>
         <span>{label}</span>
       </div>
     </div>
@@ -2549,21 +2552,24 @@ function MdChartRing({ value, label }) {
 
 function MdBarChart() {
   const data = [
-    ['Production', 72],
-    ['Office', 88],
-    ['Dispatch', 90],
-    ['Quality', 69],
-    ['Operations', 78]
+    { label: 'Production', value: 72, count: '58 emp' },
+    { label: 'Office', value: 88, count: '24 emp' },
+    { label: 'Dispatch', value: 90, count: '12 emp' },
+    { label: 'Quality', value: 69, count: '19 emp' },
+    { label: 'Operations', value: 78, count: '11 emp' }
   ];
   return (
     <div className="md-bars">
-      {data.map(([label, value]) => (
-        <div className="md-bar-line" key={label}>
-          <span>{label}</span>
-          <div className="bar">
-            <span style={{ width: `${value}%` }} />
+      {data.map((item) => (
+        <div className="md-bar-line" key={item.label}>
+          <div className="md-bar-info">
+            <span>{item.label}</span>
+            <span className="md-bar-count">({item.count})</span>
           </div>
-          <strong>{value}%</strong>
+          <div className="bar">
+            <span style={{ width: `${item.value}%` }} />
+          </div>
+          <strong>{item.value}%</strong>
         </div>
       ))}
     </div>
